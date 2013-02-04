@@ -1,0 +1,13 @@
+Metadata-Version: 1.0
+Name: osh
+Version: 1.0.3
+Summary: object-oriented shell extensions
+Home-page: http://geophile.com/osh
+Author: Jack Orenstein
+Author-email: jao@geophile.com
+License: GPL
+Download-URL: http://geophile.com/osh/osh-1.0.3.tar.gz
+Description: Command-line and API toolkit combining cluster access, database access and data slicing and dicing.
+Keywords: python,command-line,API,cluster,database
+Platform: Linux
+Platform: OSX

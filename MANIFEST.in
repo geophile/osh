@@ -1,0 +1,6 @@
+include *.txt
+recursive-include docs *
+recursive-include osh *.py 
+recursive-include bin *
+recursive-include scripts *
+recursive-include test *

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>osh</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;osh
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="osh-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package osh</h1><p class="nomargin-top"><span class="codelink"><a href="osh-pysrc.html">source&nbsp;code</a></span></p>
+<p>Osh is documented in the following packages and modules:</p>
+  <ul>
+    <li>
+      <b><code>osh.api</code></b>: Non-command portions of the osh API.
+    </li>
+    <li>
+      <b><code>osh.builtins</code></b>: Builtin osh functions and classes.
+    </li>
+    <li>
+      <b><code>osh.command</code></b>: Modules implementing osh commands. 
+      Documentation covers both the command-line and application 
+      programming interfaces.
+    </li>
+    <li>
+      <b><code>osh.file</code></b>: Represents files.
+    </li>
+    <li>
+      <b><code>osh.function</code></b>: Many osh commands (e.g. 
+      <code>f</code>, <code>select</code>) take functions as arguments. 
+      <code>osh.function</code> has no public interface, but the 
+      documentation of this module describes the use of functions in both 
+      the command-line and application programming interfaces.
+    </li>
+    <li>
+      <b><code>osh.process</code></b>: Represents currently running 
+      processes (Linux only).
+    </li>
+    <li>
+      <b><code>osh.trace</code></b>: Trace osh internals.
+    </li>
+  </ul>
+
+<!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Submodules</span></td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="osh.api-module.html">osh.api</a></strong>: <em class="summary">The osh API (Application Programming Interface) supports the use of
+        osh from Python code.</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.builtins-module.html">osh.builtins</a></strong>: <em class="summary">This module contains miscellaneous functions builtin to osh.</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command-module.html">osh.command</a></strong>: <em class="summary">These pages document osh commands for both the command-line and 
+        application programming interfaces.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="osh.command.agg-module.html">osh.command.agg</a></strong>: <em class="summary"><code>agg [-r] [[-g|-c] GROUPING_FUNCTION] INITIAL_VALUE 
+        AGGREGATION_FUNCTION</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.cat-module.html">osh.command.cat</a></strong>: <em class="summary"><code>cat FILENAME</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.copyfrom-module.html">osh.command.copyfrom</a></strong>: <em class="summary"><code>copyfrom [-Crpx] FILES LOCAL_DIR</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.copyto-module.html">osh.command.copyto</a></strong>: <em class="summary"><code>copyto [-rpC] FILE ... REMOTE_DIR</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.expand-module.html">osh.command.expand</a></strong>: <em class="summary"><code>expand [POSITION]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.f-module.html">osh.command.f</a></strong>: <em class="summary"><code>f FUNCTION</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.fork-module.html">osh.command.fork</a></strong>: <em class="summary">For API usage only, (for CLI use <code>osh @FORK [ ... ]</code> 
+        syntax instead.)</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.gen-module.html">osh.command.gen</a></strong>: <em class="summary"><code>gen [-p PAD] [COUNT [START]]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.head-module.html">osh.command.head</a></strong>: <em class="summary"><code>head N</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.help-module.html">osh.command.help</a></strong>: <em class="summary"><code>help [OSH_COMMAND]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.imp-module.html">osh.command.imp</a></strong>: <em class="summary"><code>import MODULE_NAME ...</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.install-module.html">osh.command.install</a></strong>: <em class="summary"><code>install [-d INSTALL_DIRECTORY] [-p PACKAGE] DIRECTORY</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.installosh-module.html">osh.command.installosh</a></strong>: <em class="summary"><code>installosh INSTALL_DIRECTORY [OSH_CONFIG_FILE]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.ls-module.html">osh.command.ls</a></strong>: <em class="summary"><code>ls [-01rfds] [FILENAME_PATTERN ...]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.merge-module.html">osh.command.merge</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.out-module.html">osh.command.out</a></strong>: <em class="summary"><code>out [-t] [-a FILENAME] [-f FILENAME] [-c | FORMAT]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.ps-module.html">osh.command.ps</a></strong>: <em class="summary"><code>ps [-o]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.py-module.html">osh.command.py</a></strong>: <em class="summary"><code>py PYTHON_CODE</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.red-module.html">osh.command.red</a></strong>: <em class="summary"><code>red -r [BINARY_FUNCTION ...]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.remote-module.html">osh.command.remote</a></strong>: <em class="summary">For API usage only, (for CLI use <code>osh @CLUSTER [ ... ]</code> 
+        syntax instead.)</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.remoteinstall-module.html">osh.command.remoteinstall</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.reverse-module.html">osh.command.reverse</a></strong>: <em class="summary"><code>reverse</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.select-module.html">osh.command.select</a></strong>: <em class="summary"><code>select FUNCTION</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.sh-module.html">osh.command.sh</a></strong>: <em class="summary"><code>sh COMMAND</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.sort-module.html">osh.command.sort</a></strong>: <em class="summary"><code>sort [FUNCTION]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.sql-module.html">osh.command.sql</a></strong>: <em class="summary"><code>sql [DB] QUERY</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.squish-module.html">osh.command.squish</a></strong>: <em class="summary"><code>squish [BINARY_FUNCTION ...]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.stdin-module.html">osh.command.stdin</a></strong>: <em class="summary">For API usage only, (for CLI use <code>cat ... | osh ^ ...</code> 
+        syntax instead.)</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.tail-module.html">osh.command.tail</a></strong>: <em class="summary"><code>tail N</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.testssh-module.html">osh.command.testssh</a></strong>: <em class="summary"><code>testssh</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.timer-module.html">osh.command.timer</a></strong>: <em class="summary"><code>timer [-t] INTERVAL</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.unique-module.html">osh.command.unique</a></strong>: <em class="summary"><code>unique [-c]</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.version-module.html">osh.command.version</a></strong>: <em class="summary"><code>version</code></em>    </li>
+    <li> <strong class="uidlink"><a href="osh.command.window-module.html">osh.command.window</a></strong>: <em class="summary"><code>window PREDICATE</code></em>    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">osh.core</strong>    </li>
+    <li> <strong class="uidlink"><a href="osh.file-module.html">osh.file</a></strong>: <em class="summary">Represents a file or directory on the local host.</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.function-module.html">osh.function</a></strong>: <em class="summary">Encapsulates functions used in osh commands such as <code>f</code> 
+        and <code>select</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.process-module.html">osh.process</a></strong>: <em class="summary">Provides information on currently running processes, by examining 
+        files in the <code>/proc</code> filesystem.</em>    </li>
+    <li> <strong class="uidlink"><a href="osh.trace-module.html">osh.trace</a></strong>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Jan 30 23:17:38 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

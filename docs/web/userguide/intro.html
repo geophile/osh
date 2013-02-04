@@ -1,0 +1,217 @@
+<html>
+<head><title>Osh 1.0 User's Guide</title></head>
+<body>
+
+<h1>Introduction</h1>
+
+Osh (Object SHell) is a tool that integrates the processing of
+operating system objects,
+Python objects, database access, and remote access to a cluster of
+nodes. These capabilities are made available through a command-line
+interface (CLI) and a Python application programming interface (API).
+
+<h2>Execution Model</h2>
+
+Osh processes streams of Python objects using simple commands. Complex
+data processing is achieved by command sequences in which the output
+from one command is passed to the input of the next. This is similar
+to composing Unix commands using pipes.  However, Unix commands pass
+strings from one command to the next, and the commands (grep, awk,
+sed, etc.) are heavily string-oriented.  Osh commands process Python
+objects, and it is objects that are sent from one command to the
+next. Objects may be primitive types such as strings and numbers;
+composite types such as tuples, lists and maps; objects representing
+files, processes, dates and times; or user-defined objects.
+
+<p>
+The first command in an osh command sequence generates a stream of
+objects. Each subsequent command reads a stream of objects and writes
+a stream of objects. For a given command, the relationship between
+inputs and outputs is not necessarily one-to-one. For example,
+the <tt>f</tt> command reads one object from the stream, applies a
+function to it, and then generates one object to its output
+stream. But the <tt>select</tt> command copies objects from the input
+stream to the output stream if and only if the <tt>select</tt>'s
+predicate evaluates to true for the input object. <tt>expand</tt> may
+generate any number of output objects for a single input object.
+
+<p>
+Commands, in addition to operating on input and output streams, may
+have side-effects.  For example, <tt>out</tt> writes to stdout or a
+file; <tt>sql</tt> may update a database; and commands with function
+arguments (e.g. <tt>f</tt>, <tt>select</tt>) can operate on variables
+in the osh command sequence's namespace.
+
+<h2>Examples</h2>
+
+<b>List the files in the current directory:</b> 
+
+<pre>
+    <font color="grey">jao@zack$</font> osh ls ^ out
+    ('./history.html',)
+    ('./index.html',)
+    ('./license.txt',)
+    ('./ref',)
+    ('./similar.html',)
+    ('./userguide',)
+</pre>
+
+<ul>
+  <li><b><tt>osh:</tt></b> Invokes the osh interpreter.
+  <li><b><tt>ls:</tt></b> This is an osh command, not a shell command. Like the shell's <tt>ls</tt> command,
+    the osh <tt>ls</tt> command lists the files in the current directory. But instead of producing 
+    filenames printed to stdout, <tt>osh.File</tt> objects are produced and
+    sent to the command's output stream.
+  <li><b><tt>^:</tt></b> This is the osh symbol for piping objects from one command to the next. The <tt>osh.File</tt>
+    objects produced by the previous command (<tt>ls</tt>) are piped to the next command (<tt>out</tt>).
+  <li><b><tt>out:</tt></b> This command takes a stream of objects as input, renders each as a string using
+    the python function <tt>str</tt>, and prints the string on stdout. 
+</ul>
+
+The reason that the output contains tuples such as <tt>('./index.html',)</tt> instead of strings
+is that osh always pipes tuples between commands. The input to <tt>out</tt> is a stream of tuples, which are
+rendered using <tt>str</tt>. Standard python formatting can be used by supplying a formatting argument to
+<tt>out</tt>. So to render as an unquoted string,
+the command line would be
+<pre>
+    <font color="grey">jao@zack$</font> osh ls ^ out %s
+</pre>
+
+<tt>osh.File</tt> objects have a number of attributes. These can be examined and printed, e.g.
+
+<p><b>List files and selected attributes:</b>
+
+<pre>
+    <font color="grey">jao@zack$</font> osh ls ^ f 'lambda file: (oct(file.mode), file.size, file)' $
+    ('0100644', 8137, './history.html')
+    ('0100644', 5508, './index.html')
+    ('0100644', 733, './license.txt')
+    ('040755', 10234, './ref')
+    ('0100644', 2108, './similar.html')
+    ('040755', 408, './userguide')
+</pre>
+
+In this command sequence, the output from the <tt>ls</tt> command, a stream of <tt>osh.File</tt> objects,
+is piped to the <tt>f</tt> command. <tt>f</tt> applies a function to each input tuple, and sends
+the resulting value to the output stream. In this example, the function has one argument named <tt>file</tt>.
+Output from this command contains the file's mode (in octal), size, and
+the file itself.
+
+<p>This example also shows that <tt>^ out</tt> may be replaced by the symbol <tt>$</tt>. (If you need to
+specify a formatting argument or other argument to <tt>out</tt>, then this shorthand cannot be used.)
+
+
+<p><b>Filter out directories:</b>
+  
+<p>To limit the information printed to just files, omitting directories, the output from <tt>ls</tt> can be filtered:
+
+<pre>
+    <font color="grey">jao@zack$</font> osh ls ^ select 'file: file.isfile' ^ f 'file: (oct(file.mode), file.size, file)' $
+    ('0100644', 8137, './history.html')
+    ('0100644', 5508, './index.html')
+    ('0100644', 733, './license.txt')
+    ('0100644', 2108, './similar.html')
+</pre>
+
+Now, the output from <tt>ls</tt> is piped to <tt>select</tt>. <tt>select</tt> has a function
+argument which selects <tt>osh.File</tt>s for which the <tt>isfile</tt> attribute is true. The selected
+<tt>osh.File</tt>s are then passed on and processed as before.
+
+<p>In this command sequence, the commands <tt>f</tt> and <tt>select</tt> both have function arguments, but
+the python keyword <tt>lambda</tt> keyword has been omitted, a shorthand permitted by osh.
+
+<p><b>Recursive listing:</b>
+
+<p>A recursive listing can be obtained by using the <tt>-r</tt> flag to the <tt>ls</tt> command:
+
+<pre>
+    <font color="grey">jao@zack$</font> osh ls -r ^ f 'file: (oct(file.mode), file.size, file)' $
+    ('040755', 10234, './ref')
+    ('040755', 408, './userguide')
+    ('0100644', 8137, './history.html')
+    ('0100644', 5508, './index.html')
+    ('0100644', 733, './license.txt')
+    ('0100644', 2108, './similar.html')
+    ('0100644', 50938, './ref/api-objects.txt')
+    ('0100644', 15841, './ref/class-tree.html')
+    ...
+    ('0100644', 8302, './userguide/config.html')
+    ('0100644', 503, './userguide/index.html')
+    ('0100644', 4201, './userguide/installation.html')
+    ('0100644', 8888, './userguide/intro.html')
+</pre>
+
+<p><b>Listing from all nodes of a cluster:</b>
+
+Osh commands can be run remotely, on multiple hosts, in parallel. For example, suppose you
+have a cluster named <tt>fred</tt>, with hosts <tt>101</tt>, <tt>102</tt>, and <tt>103</tt>,
+(the cluster name and node names would be specified in the
+osh configuration file, <tt>.oshrc</tt>). You could list the
+<tt>/var/log/messages*</tt> files from all these nodes as follows:
+
+<pre>
+    <font color="grey">jao@zack$</font> osh @fred [ ls '/var/log/messages*' ^ f 'file: (oct(file.mode), file.size, file.abspath)' ] $
+    ('101', '0100600', 153311, '/var/log/messages.3')
+    ('101', '0100600', 245349, '/var/log/messages.4')
+    ('101', '0100600', 238494, '/var/log/messages')
+    ('101', '0100600', 75552, '/var/log/messages.1')
+    ('101', '0100600', 99174, '/var/log/messages.2')
+    ('102', '0100600', 153311, '/var/log/messages.3')
+    ('102', '0100600', 245349, '/var/log/messages.4')
+    ('102', '0100600', 238494, '/var/log/messages')
+    ('102', '0100600', 75552, '/var/log/messages.1')
+    ('103', '0100600', 160875, '/var/log/messages.2')
+    ('103', '0100600', 419873, '/var/log/messages.3')
+    ('103', '0100600', 66614, '/var/log/messages.4')
+    ('103', '0100600', 57772, '/var/log/messages')
+    ('103', '0100600', 87651, '/var/log/messages.1')
+    ('103', '0100600', 99989, '/var/log/messages.2')
+</pre>
+
+<tt>@fred [ ... ]</tt> specifies that the bracketed command
+will be executed remotely, on each node of cluster <tt>fred</tt>,
+in parallel. Note that the last returned value is specified as <tt>file.abspath</tt>, the file's absolute path --
+a string, and not <tt>file</tt>, the <tt>osh.File</tt> object itself. The reason for this is that <tt>osh.File</tt>
+objects cannot transmitted, (from a host in the <tt>fred</tt> cluster to the local host).
+Attributes of an <tt>osh.File</tt> object are computed on demand, and
+so cannot be obtained outside of the host containing the file. <tt>Process</tt> objects
+have similar restrictions.
+
+<p><b>Sum of file sizes across the cluster:</b>
+
+<p>Suppose that we want to compute the sum
+of the sizes of all the /var/log/messages* files in all the nodes of the <tt>fred</tt>
+cluster. The aggregation command, <tt>agg</tt> can be used to do this:
+
+<pre>
+    <font color="grey">jao@zack$</font> osh @fred [ ls '/var/log/messages*' ^ f 'file: file.size' ] ^ agg 0 'sum, node, size: sum + size' $
+    (2417360,)
+</pre>
+
+The remote <tt>ls</tt> has been simplified since all we want to do is sum the sizes; we don't
+need the other attributes returned in the previous examples.
+
+<p>The first argument to <tt>agg</tt> is the initial value of the accumulator, <tt>0</tt>. The second
+argument is an aggregation function. The first argument of this function is the
+current value of the accumulator, <tt>sum</tt>, and the remaining arguments are the
+values returned from the nodes of the cluster. The function returns <tt>sum + size</tt>
+as its value, which is then bound to <tt>sum</tt> for the next tuple of input
+from the cluster.
+
+
+<h2>Osh Interfaces</h2>
+
+Osh has two interfaces:
+
+<p>
+<b><a href="cli.html">Command-line interface (CLI)</a>:</b> The osh executable interprets command-line arguments as osh syntax.
+    Any shell should be usable, however some osh CLI syntax may require escapes in some shells. (The osh
+    CLI has been tested most extensively using the bash shell.)
+
+<p>
+<b><a href="api.html">Python application programming interface (API)</a>:</b> The osh CLI invokes the osh runtime,
+    which invokes Python modules corresponding to each command. The runtime and command modules
+    can also be invoked from a Python API.
+
+</body>
+</html>

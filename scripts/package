@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# osh
+# Copyright (C) Jack Orenstein <jao@geophile.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+PACKAGE_DIR=/tmp/osh.package
+pushd $OSH_BASE
+find . -type f | grep "~" | xargs rm
+$OSH_BASE/bin/gendoc
+rm -rf $PACKAGE_DIR
+mkdir $PACKAGE_DIR
+cp -rp * $PACKAGE_DIR
+rm -rf dist MANIFEST
+pushd $PACKAGE_DIR
+python ./setup.py sdist
+popd
+rm -rf dist
+mkdir dist
+cp $PACKAGE_DIR/dist/osh*.tar.gz dist
+rm -rf $PACKAGE_DIR
+popd

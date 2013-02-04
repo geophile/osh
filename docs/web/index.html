@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>osh: Object-Oriented Shell</title>
+</head>
+
+<body bgcolor="#cccc99" text="#000000">
+<font color=white size=10>Osh</font>
+
+<p>Osh (Object SHell) is a tool that integrates the processing of
+structured data, database access, and remote access to a cluster of
+nodes. These capabilities are made available through a command-line
+interface (CLI) and a Python application programming interface (API).
+
+<p>Osh processes streams of Python objects using simple
+commands. Complex data processing is achieved by command sequences in
+which the output from one command is passed to the input of the
+next. This is similar to composing Unix commands using pipes.
+However, Unix commands pass strings from one command to the next, and
+the commands (grep, awk, sed, etc.) are heavily string-oriented.  Osh
+commands send primitive Python types such as strings and numbers;
+composite types such as tuples, lists and maps; objects representing
+files, dates and times; or even user-defined objects.
+
+<h3>Example (CLI)</h3>
+
+Suppose you have a cluster named <tt>fred</tt>, consisting of nodes
+<tt>101</tt>, <tt>102</tt>, <tt>103</tt>. Each node has a database tracking work requests
+with a table named <tt>request</tt>. You can find the total number of open
+requests in each database as follows (using the CLI):
+
+<pre>
+    <font color="blue">jao@zack$</font> osh @fred [ remote [ sql "select count(*) from request where state = 'open'" ] ] ^ out</b>
+    ('101', 1)
+    ('102', 0)
+    ('103', 5)
+</pre>
+<ul>
+<li><tt><b>osh:</b></tt> Invokes the osh interpreter.
+<li><tt><b>@fred [ ... ]:</b></tt>
+  <tt>fred</tt> is the name of a cluster, (configured in the osh configuration file, <tt>.oshrc</tt>).
+  A thread is created for each node of the cluster, and the bracketed command is executed on each thread.
+  State associated with each thread identifies one node of the cluster.
+<li><tt><b>remote [ ... ]:</b></tt>
+  The bracketed command is run remotely, on the node identified in the thread's state.
+  So <tt>@fred [ remote [ ... ] ]</tt> runs the bracketed command on each node of cluster <tt>fred</tt>,
+  in parallel.
+<li><tt><b>sql "select count(*) from request where state = 'open'":</b></tt> <tt>sql</tt> is an osh
+command that submits a query to a relational database. The query output is returned as
+a stream of tuples.
+<li><tt><b>^ out:</b></tt> <tt>^</tt> is the osh operator for piping objects from one command to the next
+In this case, the input objects are tuples resulting from execution of a SQL query on each
+node of the cluster. The <tt>out</tt> command renders each object as a string and prints it to stdout.
+<li>Each output row identifies the node of origination
+(e.g. <tt>101</tt>, <tt>102</tt>),
+and includes a tuple
+from the database on that node. So <tt>('103', 5)</tt> means that
+the database on node <tt>103</tt>
+has <tt>5</tt>
+open requests.
+</ul>
+
+<h3>Example continued</h3>
+
+<p>Now suppose you want to find the total number of open requests
+across the cluster. You can pipe the (node, request count) tuples into an aggregation command:
+
+<pre>
+    <font color="blue">jao@zack$</font> osh @fred [ remote [ sql "select count(*) from request where state = 'open'" ] ] ^ <b>agg 0 'total, node, count: total + count' $</b>
+    6
+</pre>
+<ul>
+<li><tt><b>agg:</b></tt> <tt>agg</tt> is the aggregation command. Tuples from across the cluster are piped
+into the <tt>agg</tt> command, which will accumulate results from all inputs.
+<li><tt><b>0:</b></tt> <tt>agg</tt> will maintain a total, which is initialized to <tt>0</tt>.
+<li><tt><b>'total, node, count: total + count':</b></tt> This specifies an aggregation function.
+<tt>total</tt> is the running total,
+which was initialized to <tt>0</tt>. 
+<tt>node</tt> and <tt>count</tt> come from the <tt>sql</tt> command executed on each node of the cluster.
+<tt>total + count</tt> accumulates the counts from each node.
+<li><tt><b>$:</b></tt> An alternative to <tt>^ out</tt> that can be used at the end of a command only.
+<li><tt><b>6:</b></tt> The total of the counts from across the cluster. 
+</ul>
+
+Note that this example combines remote execution on cluster nodes, database access (on each cluster node),
+and data processing (the aggregation step) in a single framework.
+
+<h3>Example (API)</h3>
+
+<p>
+The same computation can be done using the API as follows:
+
+<pre>
+    #!/usr/bin/python
+    
+    from osh.api import *
+    
+    osh(fork("fred",
+             remote(sql("select count(*) from request where state = 'open'"))),
+        agg(0, lambda total, node, count: total + count))        
+</pre>
+
+<ul>
+  <li><tt><b>from osh.api import *</b></tt>: Imports the osh API.
+  <li><tt><b>osh(...)</b></tt>: Invokes the osh interpreter
+  <li><tt><b>fork("fred", remote(sql(...)))</b></tt>: Runs the <tt>sql</tt> command on each node of cluster <tt>fred</tt>, in parallel.
+  <li><tt><b>agg(...)</b></tt>: Aggregates query results from across the cluster.
+</ul>
+
+<b>More information:</b>
+<br>
+<br><a href="license.txt">License (GPL)</a>
+<br><a href="history.html">Release history</a>
+<br><a href="userguide/index.html">User's Guide</a>
+<br><a href="ref/index.html">Command Reference Guide</a>
+<br><a href="osh-1.0.3.tar.gz">Download</a>
+<br><a href="similar.html">Software with similar goals</a>
+<br><a href="pycon2006/pycon2006_paper.html">PyCon 2006 paper on osh</a>
+<br><a href="pycon2006/index.html">PyCon 2006 talk on osh</a>
+
+<hr>
+<address>
+<a href="mailto:jao@geophile.com">jao@geophile.com</a>
+</address>
+
+
+</body>
+</html>

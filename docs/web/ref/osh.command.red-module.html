@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>osh.command.red</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="osh-module.html">Package&nbsp;osh</a> ::
+        <a href="osh.command-module.html">Package&nbsp;command</a> ::
+        Module&nbsp;red
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="osh.command.red-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module red</h1><p class="nomargin-top"><span class="codelink"><a href="osh.command.red-pysrc.html">source&nbsp;code</a></span></p>
+<p><code>red -r [BINARY_FUNCTION ...]</code></p>
+  <p>Aggregates (reduces) objects from the input stream in a simpler but 
+  less general way than the <code>agg</code> command.</p>
+  <p>A <code>BINARY_FUNCTION</code> takes two inputs and produces one 
+  output. Binary operators and user-defined functions can be used as 
+  <code>BINARY_FUNCTION</code>s. Given a sequence of inputs such as 
+  <code>(1,), (2,), (3,)</code>, <code>red</code> can be used to find the 
+  sum:</p>
+<pre class="literalblock">
+   ... ^ red +
+</pre>
+  <p>yields <code>(6,)</code>. If each input sequence contains multiple 
+  values, then multiple <code>BINARY_FUNCTION</code>s can be provided. For 
+  example, to find the sums of the first 10 integers, the sum of their 
+  squares, and the sum of their cubes:</p>
+<pre class="literalblock">
+   osh gen 10 ^ f 'x: (x, x**2, x**3)' ^ red + + + $
+</pre>
+  <p>which yields the output <code>(45, 285, 2025)</code>.</p>
+  <p>If <code>.</code> is provided as one of the 
+  <code>BINARY_FUNCTION</code>s, then that value is not aggregated. 
+  Instead, aggregation is done for the groups defined by the indicated 
+  elements. For example, suppose the input sequence is:</p>
+<pre class="literalblock">
+   (1, 10, 5, 100)
+   (1, 10, 6, 200)
+   (1, 11, 4, 100)
+   (1, 11, 3, 200)
+   (2, 20, 8, 100)
+   (2, 20, 9, 200)
+   (2, 20, 10, 300)
+   (3, 30, 5, 100)
+</pre>
+  <p>If this sequence is piped to this invocation of <code>red</code>:</p>
+<pre class="literalblock">
+   red . . + +
+</pre>
+  <p>Then the output sequence would be:</p>
+<pre class="literalblock">
+   (1, 10, 11, 300)
+   (1, 11, 7, 300)
+   (2, 20, 17, 300)
+   (3, 30, 5, 100)
+</pre>
+  <p>The two <code>.</code>s, in the first two positions, mean that the 
+  groups used for aggregation are <code>(1, 10)</code>, <code>(1, 
+  11)</code>, <code>(2, 20)</code>, and <code>(3, 30)</code>. The <code>(1,
+  10)</code> group has two rows, <code>(1, 10, 5, 100)</code>, and 
+  <code>(1, 10, 6, 200)</code>. The two <code>+</code>s mean that the items
+  in the last two fields should be summed. Adding the items in the third 
+  position, 5 + 6 = 11; and in the last position, 100 + 200 = 300.</p>
+  <p>If the <code>-r</code> flag is specified, then one output object is 
+  generated for each input object; the output object contains the current 
+  accumulated values. The accumulator appears in the output row before the 
+  inputs. For example, if the input stream contains <code>(1,), (2,), 
+  (3,)</code>, then the running total can be computed as follows:</p>
+<pre class="literalblock">
+   ... ^ red -r + ^ ...
+</pre>
+  <p>The output stream would be <code>(1, 1), (3, 2), (6, 3)</code>. In the
+  last output object, <code>6</code> is the sum of the current input 
+  (<code>3</code>) and all preceding inputs (<code>1, 2</code>).</p>
+  <p>The <code>-r</code> flag can also be used with grouping. For example, 
+  if the input objects are <code>('a', 1), ('a', 2), ('b', 3), ('b', 
+  4)</code>, then the running totals for the strings would be computed as 
+  follows:</p>
+<pre class="literalblock">
+   ... ^ red -r -g 'x, y: x' 0 'sum, x, y: sum + y' ^ ...
+</pre>
+  <p>The output stream would be <code>(1, 'a', 1), (3, 'a', 2), (3, 'b', 
+  3), (7, 'b', 4)</code>.</p>
+
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Functions</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="osh.command.red-module.html#red" class="summary-sig-name">red</a>(<span class="summary-sig-arg">binary_functions</span>,
+        <span class="summary-sig-arg">running</span>=<span class="summary-sig-default">False</span>)</span><br />
+      <code>binary_functions</code> is a sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="osh.command.red-pysrc.html#red">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Variables</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'osh.command'"><code class="variable-quote">'</code><code class="variable-string">osh.command</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Function Details</span></td>
+</tr>
+</table>
+<a name="red"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">red</span>(<span class="sig-arg">binary_functions</span>,
+        <span class="sig-arg">running</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="osh.command.red-pysrc.html#red">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p><code>binary_functions</code> is a sequence. Each element of 
+  <code>binary_functions</code> is either None or a binary function. If no 
+  elements are <code>None</code>, then the binary function in position 
+  <code>i</code> is used to reduce the values in element <code>i</code> of 
+  the input sequences. If there are <code>None</code> values, then these 
+  are used to define groups of inputs, partitioning by the values in the 
+  indicated columns. The remaining binary functions then compute reductions
+  within each group. If <code>running</code> is <code>False</code> then 
+  there is one output tuple in the absence of grouping; otherwise there is 
+  one tuple output per group. If <code>running</code> is {True}, then the 
+  aggregate value computed so far is written out for each input, i.e., the 
+  output contains &quot;running totals&quot;. In this case, the aggregate 
+  value appears before the input values.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Jan 30 23:17:38 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

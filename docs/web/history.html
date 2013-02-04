@@ -1,0 +1,243 @@
+<html>
+<head><title>Osh Release History</title></head>
+<body bgcolor="#cccc99" text="#000000">
+<font color=white size=10>Osh Release History</font>
+<table border="1" cellpadding="5">
+<p>
+<tr>
+    <td><b>Version</b></td>
+    <td width=175><b>Date</b></td>
+    <td><b>Description</b></td>
+</tr>
+<tr>
+    <td>1.0.3</td>
+    <td>January 27, 2013</td>
+    <td><ul>
+        <li>Terminal output symbol ($) now formats output using %s. This avoids tuple notation for output tuples of size 1.
+    </ul></td>
+</tr>
+<tr>
+    <td>1.0.2</td>
+    <td>October 3, 2010</td>
+    <td><ul>
+        <li>File and Process objects can now be transmitted, e.g. this works: <tt>osh @fred [ ls /foo/bar ] $</tt>
+        <li><tt>ps</tt> command can now optionally omit the osh process itself from the list
+          of processes.
+        <li><tt>timer</tt> can now output time as a tuple or seconds since 1/1/1970.
+        <li><tt>process.command_line</tt> renamed to <tt>commandline</tt>.
+        <li><tt>sql</tt> command is now better at figuring out whether to report rows or a row count.
+        Native postgres driver support has been disabled as a result. use a DBAPI driver instead.
+        <li>Fixed bugs in handling of list- and tuple-valued accumulators for the <tt>agg</tt> and
+        <tt>red</tt> commands.
+        <li>Fixed long-standing bug in <tt>out</tt> command which occasionally resulted in misplaced
+          newline characters downstream from a <tt>fork</tt> command.
+    </ul></td>
+</tr>
+<tr>
+    <td>1.0.1</td>
+    <td>May 11, 2010</td>
+    <td><ul>
+        <li>MySQL now supported. (It just worked, but now I know.)
+        <li>Added support for ssh identity files.
+        <li>New command: <tt><b>red</b></tt> (reduce): A simplified form of the <tt>agg</tt> (aggregation) command.
+          <tt>agg</tt> is more general. <tt>red</tt> is simpler, but should suffice in nearly all cases.
+        <li>Replaced used of process module by subprocess.
+        <li>Bug fixes.
+    </ul></td>
+</tr>
+<tr>
+    <td>1.0.0</td>
+    <td>October 27, 2008</td>
+    <td>Major overhaul:
+      <ul>
+        <li><b>Overhauled user guide:</b> Added page discussing osh concepts.
+        <li><b>DBAPI 2.0 support:</b> Earlier versions of osh could only access Postgres databases, and
+          only using the <a href="http://www.pygresql.org/">pygresql</a> driver.
+          Osh now supports any <a href="http://www.python.org/dev/peps/pep-0249/">DBAPI 2.0</a>-compliant
+          driver.
+        <li><b>New commands:</b> <tt>ls</tt> (list files) and <tt>ps</tt> (list processes).
+        <li><b>File support:</b> A <tt><b>File</b></tt> class has been added to osh, simplifying operations
+          on files and directories. For example, <tt><b>osh ls /foo/bar ^ f 'file: (file, file.size)' $</b></tt>
+          prints a list of file names and sizes for files in /foo/bar.
+        <li><b>Remote execution and multithreaded execution:</b> Remote execution, (as in
+          <tt>osh @cluster [ ... ]</tt>), created a thread for each node and then executed
+          the bracketed command on each node. Forking and remote execution have been unbundled.
+          The CLI syntax has been generalized to enable forking separately from remote execution.
+        <li><b>Merging of ordered sequences:</b> If each thread of a forked command creates an ordered sequence,
+          then it is often useful to merge the sequences into a single sequence. In earlier releases of osh,
+          this would have required a sort. In many situations, the sort can be replaced by a merge.
+      </ul>
+    </td>
+</tr>
+<tr>
+    <td>0.9.2</td>
+    <td>January 1, 2008</td>
+    <td>
+      <ul>
+        <li>Bug fixes.
+        <li>Added support for "running totals" to the <tt>agg</tt> command, (the <tt>-r</tt> flag).
+      </ul>
+    </td>
+</tr>
+<tr>
+    <td>0.9.1</td>
+    <td>October 7, 2007</td>
+    <td>
+      Bug fixes.
+    </td>
+</tr>
+<tr>
+    <td>0.9.0</td>
+    <td>August 25, 2007</td>
+    <td>
+      Major overhaul of osh.
+        <ul>
+            <li>Removed the concept of named streams. They were only used to have separate output and error streams,
+                and error streams were awkward to use, different in the CLI and API, and a mess internally. The 'o'
+                stream is still present, but not named. It's just the one stream that carries objects from one
+                command to the next. Exceptions and stderr output are handled by functions, which can be replaced
+                by the user. Default implementations print to stderr.
+            <li>Cleanup of module names, following introduction of package structure in version 0.8.0.
+                E.g., osh.oshapi has been renamed osh.api.
+            <li>Complete rewrite of documentation. Command-line help and reference manual
+                are both derived from module and function __doc__ strings. The reference manual is
+                generated using <a href="http://epydoc.sourceforge.net/">epydoc</a>.
+        </ul>
+        Other changes:
+        <ul>
+            <li>gen command has new flag, -p, to format generated integers as 0-padded strings.
+        </ul>
+    </td>
+</tr>
+<tr>
+    <td>0.8.1</td>
+    <td>April 15, 2007</td>
+    <td>
+        <ul>
+            <li>Added cat command.
+            <li>Improvements in error handling, especially remote errors.
+        </ul>
+    </td>
+</tr>
+<tr>
+    <td>0.8.0</td>
+    <td>January 8, 2007</td>
+    <td>
+<ul>
+<li>Restructured so that top-level modules are in the <tt>osh</tt> package.
+<li>Osh configuration file now supports slice notation, (e.g. <tt>osh.remote['cluster-123'].user = 'root'</tt>).
+<li>Added version command.
+<li>Added imp command.
+<li>Added py command.
+<li>oshapi errors are now reported as exceptions, not output on e stream. 
+Better fit for a python script. This also enables osh() to return o stream output in a list.
+<li>New oshapi command, return_list() to return o stream output in a list. Most uses of oshapi
+no longer need to handle o and e stream outputs via handlers.
+<li>Improvements in error handling, especially remote errors.
+</ul>
+</td>
+</tr>
+<tr>
+    <td>0.7.1</td>
+    <td>October 5, 2006</td>
+    <td>
+<ul>
+<li>oshtestssh is now much faster. It checks all nodes in parallel. 
+<li>Fixed bugs and error reporting in the sql command.
+<li>Cluster configuration can now specify a default database for each node of the cluster, (see documentation for sql command).
+</ul>
+</td>
+</tr>
+<tr>
+    <td>0.7.0</td>
+    <td>April 26, 2006</td>
+    <td>Major upgrade:
+<ul>
+<li>Added an API: osh can now be used from within Python.
+<li>Nodes of cluster can be configured as a list of addresses as before; or as a map in which the key is a logical
+name and the value is the address.
+<li>Generalized expand command.
+<li>Modified options of window command.
+</ul>
+    </td>
+</tr>
+<tr>
+    <td>0.6.3</td>
+    <td>February 15, 2006</td>
+    <td>
+Bugfix and minor feature release. Fixed error handler to not 
+propagate errors downstream.
+Added <tt>-t</tt> option to <tt>out</tt>.
+Much improved ctrl-c handling.
+    </td>
+</tr>
+<tr>
+    <td>0.6.2</td>
+    <td>December 15, 2005</td>
+    <td>
+Bugfix release. Fixed a number of bugs in the <tt>squish</tt> command.
+    </td>
+</tr>
+<tr>
+    <td>0.6.1</td>
+    <td>November 15, 2005</td>
+    <td>
+Bugfix release. <tt>sql</tt> command no longer hides error messages from database system.
+    </td>
+</tr>
+<tr>
+    <td>0.6.0</td>
+    <td>October 31, 2005</td>
+    <td>
+Cleaner integration with Python functions. Previously, functions in <tt>f</tt>, <tt>select</tt>, etc. 
+received a single argument, typically a tuple or list, and elements were obtained
+by subscripting.
+Now, the elements of
+an incoming tuple or list are assigned to arguments. (If you want
+to use a tuple argument, then prefix the argument declaration with '*', just
+as in ordinary Python.) Also deleted spread command, replacing it with expand, which
+is more general.
+    </td>
+</tr>
+<tr>
+    <td>0.5</td>
+    <td>October 25, 2005</td>
+    <td>
+Cleanup for first public release. Added timer command, process objects and the 
+processes function.
+    </td>
+</tr>
+<tr>
+    <td>0.4</td>
+    <td>September 8, 2005</td>
+    <td>
+Lots of polishing and bug-fixing based on day-to-day usage in helping to develop
+the <a href="http://www.archivas.com">Archivas</a> cluster, ArC.
+    </td>
+</tr>
+<tr>
+    <td>0.3</td>
+    <td>May 2005</td>
+    <td>
+Added remote execution syntax and commands (@, [...], install, installosh, copyfrom, copyto).
+    </td>
+</tr>
+<tr>
+    <td>0.2</td>
+    <td>December 2004</td>
+    <td>
+Complete rewrite. Introduced piping of objects internal to python process, denoted by '^'. 
+Everything after "osh" on the command line is concatenated into a single string
+which is then parsed. Introduced tpg parser to parse command line.
+    </td>
+</tr>
+<tr>
+    <td>0.1</td>
+    <td>October 2004</td>
+    <td>
+Each osh command ran as a separate process. Pickling was used to transmit objects between commands.
+    </td>
+</tr>
+</table>
+</body>
+</html>

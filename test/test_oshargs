@@ -1,0 +1,187 @@
+#!/usr/bin/python
+
+# osh
+# Copyright (C) Jack Orenstein <jao@geophile.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+import oshargs
+import types
+
+def cli_args(*strings):
+    args = oshargs.OshArgsCLI()
+    if len(strings) == 1:
+        for token in strings[0].split():
+            args.add_token(token)
+    else:
+        for s in strings:
+            args.add_token(s)
+    print args
+    return args
+
+def api_args(*t):
+    args = oshargs.OshArgsAPI()
+    for arg in t:
+        if type(arg) is types.TupleType:
+            args.add_arg(arg[0], arg[1])
+        else:
+            args.add_arg(arg)
+    return args
+            
+
+def test_oshargs_cli():
+    # One key/val, check correct typing
+    args = cli_args('-a 1')
+    assert args.int_arg('-a') == 1
+    assert args.string_arg('-a') == '1'
+    assert args.int_arg('-a') != '1'
+    assert args.string_arg('-a') != 1
+    # Function arg
+    args = cli_args('-f', 'x: x + 1', 'x: x * 10')
+    f = args.function_arg('-f')
+    assert f((1,)) == 2
+    g = args.next_function()
+    assert g((2,)) == 20
+    # One key/val, check type error
+    args = cli_args('-a x')
+    try:
+        args.int_arg('-a')
+        assert False
+    except ValueError:
+        pass
+    assert args.string_arg('-a') == 'x'
+    # Two key/vals. Check missing key too.
+    args = cli_args('-a 1 -b 2')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    assert args.int_arg('-c') is None
+    # Flags
+    args = cli_args('-a')
+    assert args.flag('-a')
+    assert not args.flag('-b')
+    args = cli_args('-a -b')
+    assert args.flag('-a')
+    assert args.flag('-b')
+    assert not args.flag('-c')
+    # Flags and key/val
+    args = cli_args('-a 1 -b')
+    assert args.int_arg('-a') == 1
+    assert args.flag('-b')
+    args = cli_args('-a -b 1')
+    assert args.flag('-a')
+    assert args.int_arg('-b') == 1
+    args = cli_args('-a 1 -b 2 -f -g')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    assert args.flag('-f')
+    assert args.flag('-g')
+    args = cli_args('-f -g -a 1 -b 2')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    assert args.flag('-f')
+    assert args.flag('-g')
+    args = cli_args('-f -a 1 -g -b 2')
+    assert args.flag('-f')
+    assert args.flag('-g')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    args = cli_args('-a 1 -f -b 2 -g')
+    assert args.flag('-f')
+    assert args.flag('-g')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    # All anon
+    args = cli_args('a 1 b')
+    assert args.next_string() == 'a'
+    assert args.next_int() == 1
+    assert args.next_string() is 'b'
+    assert args.next_int() is None
+    assert args.next_string() is None
+    # Anon and others
+    args = cli_args('-a 1 x y')
+    assert args.int_arg('-a') == 1
+    assert args.next_string() == 'x'
+    assert args.next_string() == 'y'
+
+def test_oshargs_api():
+    # One key/val, check correct typing
+    args = api_args(('-a', 1))
+    assert args.int_arg('-a') == 1
+    assert args.string_arg('-a') == '1'
+    assert args.int_arg('-a') != '1'
+    assert args.string_arg('-a') != 1
+    # One key/val, check type error
+    args = api_args(('-a', 'x'))
+    try:
+        args.int_arg('-a')
+        assert False
+    except ValueError:
+        pass
+    assert args.string_arg('-a') == 'x'
+    # Two key/vals. Check missing key too.
+    args = api_args(('-a', 1), ('-b', 2))
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    assert args.int_arg('-c') is None
+    # Flags
+    args = api_args('-a')
+    assert args.flag('-a')
+    assert not args.flag('-b')
+    args = api_args('-a', '-b')
+    assert args.flag('-a')
+    assert args.flag('-b')
+    assert not args.flag('-c')
+    # Flags and key/val
+    args = api_args(('-a', 1), '-b')
+    assert args.int_arg('-a') == 1
+    assert args.flag('-b')
+    args = api_args('-a', ('-b', 1))
+    assert args.flag('-a')
+    assert args.int_arg('-b') == 1
+    args = api_args(('-a', 1), ('-b', 2), '-f', '-g')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    assert args.flag('-f')
+    assert args.flag('-g')
+    args = api_args('-f', '-g', ('-a', 1), ('-b', 2))
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    assert args.flag('-f')
+    assert args.flag('-g')
+    args = api_args('-f', ('-a', 1), '-g', ('-b', 2))
+    assert args.flag('-f')
+    assert args.flag('-g')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    args = api_args(('-a', 1), '-f', ('-b', 2), '-g')
+    assert args.flag('-f')
+    assert args.flag('-g')
+    assert args.int_arg('-a') == 1
+    assert args.int_arg('-b') == 2
+    # All anon
+    args = api_args('a', 1, 'b')
+    assert args.next_string() == 'a'
+    assert args.next_int() == 1
+    assert args.next_string() is 'b'
+    assert args.next_int() is None
+    assert args.next_string() is None
+    # Anon and others
+    args = api_args(('-a', 1), 'x', 'y')
+    assert args.int_arg('-a') == 1
+    assert args.next_string() == 'x'
+    assert args.next_string() == 'y'
+
+test_oshargs_cli()
+test_oshargs_api()

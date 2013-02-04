@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>osh.command.remoteinstall</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="osh-module.html">Package&nbsp;osh</a> ::
+        <a href="osh.command-module.html">Package&nbsp;command</a> ::
+        Module&nbsp;remoteinstall
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="osh.command.remoteinstall-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="osh.command.remoteinstall-module.html">Module osh.command.remoteinstall</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># osh</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) Jack Orenstein &lt;jao@geophile.com&gt;</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"># This program is free software; you can redistribute it and/or modify</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"># it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment"># the Free Software Foundation; either version 2 of the License, or</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment"># (at your option) any later version.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"># This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment"># GNU General Public License for more details.</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment"># along with this program; if not, write to the Free Software</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-comment"># Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-comment"># THIS IS NOT AN OSH COMMAND. </tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-comment"># It is located here so that remoteinstall.py can easily access it for </tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-comment"># remote installation</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable osh.command.remoteinstall.OSH_VERSION=osh.command.remoteinstall-module.html#OSH_VERSION"><a title="osh.command.remoteinstall.OSH_VERSION" class="py-name" href="#" onclick="return doclink('link-0', 'OSH_VERSION', 'link-0');">OSH_VERSION</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'1.0.3'</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable osh.command.remoteinstall.OSH=osh.command.remoteinstall-module.html#OSH"><a title="osh.command.remoteinstall.OSH" class="py-name" href="#" onclick="return doclink('link-1', 'OSH', 'link-1');">OSH</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'osh'</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"> </tt>
+<a name="os_system"></a><div id="os_system-def"><a name="L34"></a><tt class="py-lineno">34</tt> <a class="py-toggle" href="#" id="os_system-toggle" onclick="return toggle('os_system');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.remoteinstall-module.html#os_system">os_system</a><tt class="py-op">(</tt><tt class="py-param">command</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="os_system-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="os_system-expanded"><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">system</tt><tt class="py-op">(</tt><tt id="link-2" class="py-name" targets="Package osh.command=osh.command-module.html"><a title="osh.command" class="py-name" href="#" onclick="return doclink('link-2', 'command', 'link-2');">command</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt>
+<a name="os_chdir"></a><div id="os_chdir-def"><a name="L37"></a><tt class="py-lineno">37</tt> <a class="py-toggle" href="#" id="os_chdir-toggle" onclick="return toggle('os_chdir');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.remoteinstall-module.html#os_chdir">os_chdir</a><tt class="py-op">(</tt><tt class="py-param">dir</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="os_chdir-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="os_chdir-expanded"><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">chdir</tt><tt class="py-op">(</tt><tt class="py-name">dir</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"> </tt>
+<a name="os_mkdir"></a><div id="os_mkdir-def"><a name="L40"></a><tt class="py-lineno">40</tt> <a class="py-toggle" href="#" id="os_mkdir-toggle" onclick="return toggle('os_mkdir');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.remoteinstall-module.html#os_mkdir">os_mkdir</a><tt class="py-op">(</tt><tt class="py-param">dir</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="os_mkdir-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="os_mkdir-expanded"><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">    <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">mkdir</tt><tt class="py-op">(</tt><tt class="py-name">dir</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"> </tt>
+<a name="args"></a><div id="args-def"><a name="L43"></a><tt class="py-lineno">43</tt> <a class="py-toggle" href="#" id="args-toggle" onclick="return toggle('args');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.remoteinstall-module.html#args">args</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="args-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="args-expanded"><a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Function osh.command.remoteinstall.args()=osh.command.remoteinstall-module.html#args"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-3', 'args', 'link-3');">args</a></tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt class="py-name">staging_dir</tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-4', 'args', 'link-3');">args</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-name">package_filename</tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-5', 'args', 'link-3');">args</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">    <tt class="py-name">install_dir</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-6', 'args', 'link-3');">args</a></tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">staging_dir</tt><tt class="py-op">,</tt> <tt class="py-name">package_filename</tt><tt class="py-op">,</tt> <tt class="py-name">install_dir</tt> </tt>
+</div><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"> </tt>
+<a name="main"></a><div id="main-def"><a name="L50"></a><tt class="py-lineno">50</tt> <a class="py-toggle" href="#" id="main-toggle" onclick="return toggle('main');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.remoteinstall-module.html#main">main</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="main-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="main-expanded"><a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt class="py-name">staging_dir</tt><tt class="py-op">,</tt> <tt class="py-name">package_filename</tt><tt class="py-op">,</tt> <tt class="py-name">install_dir</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-7', 'args', 'link-3');">args</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">    <tt id="link-8" class="py-name" targets="Function osh.command.remoteinstall.os_chdir()=osh.command.remoteinstall-module.html#os_chdir"><a title="osh.command.remoteinstall.os_chdir" class="py-name" href="#" onclick="return doclink('link-8', 'os_chdir', 'link-8');">os_chdir</a></tt><tt class="py-op">(</tt><tt class="py-name">staging_dir</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Function osh.command.remoteinstall.os_mkdir()=osh.command.remoteinstall-module.html#os_mkdir"><a title="osh.command.remoteinstall.os_mkdir" class="py-name" href="#" onclick="return doclink('link-9', 'os_mkdir', 'link-9');">os_mkdir</a></tt><tt class="py-op">(</tt><tt id="link-10" class="py-name"><a title="osh.command.remoteinstall.OSH" class="py-name" href="#" onclick="return doclink('link-10', 'OSH', 'link-1');">OSH</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">    <tt id="link-11" class="py-name"><a title="osh.command.remoteinstall.os_chdir" class="py-name" href="#" onclick="return doclink('link-11', 'os_chdir', 'link-8');">os_chdir</a></tt><tt class="py-op">(</tt><tt id="link-12" class="py-name"><a title="osh.command.remoteinstall.OSH" class="py-name" href="#" onclick="return doclink('link-12', 'OSH', 'link-1');">OSH</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt id="link-13" class="py-name" targets="Function osh.command.remoteinstall.os_system()=osh.command.remoteinstall-module.html#os_system"><a title="osh.command.remoteinstall.os_system" class="py-name" href="#" onclick="return doclink('link-13', 'os_system', 'link-13');">os_system</a></tt><tt class="py-op">(</tt><tt class="py-string">'tar mxzvf ../%s'</tt> <tt class="py-op">%</tt> <tt class="py-name">package_filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">    <tt id="link-14" class="py-name"><a title="osh.command.remoteinstall.os_chdir" class="py-name" href="#" onclick="return doclink('link-14', 'os_chdir', 'link-8');">os_chdir</a></tt><tt class="py-op">(</tt><tt class="py-string">'..'</tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">    <tt id="link-15" class="py-name"><a title="osh.command.remoteinstall.os_system" class="py-name" href="#" onclick="return doclink('link-15', 'os_system', 'link-13');">os_system</a></tt><tt class="py-op">(</tt><tt class="py-string">'rm -rf %s/%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">install_dir</tt><tt class="py-op">,</tt> <tt id="link-16" class="py-name"><a title="osh.command.remoteinstall.OSH" class="py-name" href="#" onclick="return doclink('link-16', 'OSH', 'link-1');">OSH</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">    <tt id="link-17" class="py-name"><a title="osh.command.remoteinstall.os_system" class="py-name" href="#" onclick="return doclink('link-17', 'os_system', 'link-13');">os_system</a></tt><tt class="py-op">(</tt><tt class="py-string">'mv %s %s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-18" class="py-name"><a title="osh.command.remoteinstall.OSH" class="py-name" href="#" onclick="return doclink('link-18', 'OSH', 'link-1');">OSH</a></tt><tt class="py-op">,</tt> <tt class="py-name">install_dir</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">    <tt id="link-19" class="py-name"><a title="osh.command.remoteinstall.os_chdir" class="py-name" href="#" onclick="return doclink('link-19', 'os_chdir', 'link-8');">os_chdir</a></tt><tt class="py-op">(</tt><tt class="py-string">'..'</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">    <tt id="link-20" class="py-name"><a title="osh.command.remoteinstall.os_system" class="py-name" href="#" onclick="return doclink('link-20', 'os_system', 'link-13');">os_system</a></tt><tt class="py-op">(</tt><tt class="py-string">'rm -rf %s'</tt> <tt class="py-op">%</tt> <tt id="link-21" class="py-name"><a title="osh.command.remoteinstall.OSH" class="py-name" href="#" onclick="return doclink('link-21', 'OSH', 'link-1');">OSH</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">'__main__'</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">    <tt id="link-22" class="py-name" targets="Function osh.command.remoteinstall.main()=osh.command.remoteinstall-module.html#main"><a title="osh.command.remoteinstall.main" class="py-name" href="#" onclick="return doclink('link-22', 'main', 'link-22');">main</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Jan 30 23:17:38 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

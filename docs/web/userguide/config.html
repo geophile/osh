@@ -1,0 +1,260 @@
+<html>
+<head><title>Osh 1.0 User's Guide</title></head>
+<body>
+
+<h1>Configuring osh</h1>
+
+If osh is used to access databases or clusters, then connection information is required. This information
+is kept in a configuration file. The configuration file can also be used to define variable and function
+definitions for use in osh commands.
+
+<h2>Location of the osh configuration file</h2>
+
+The osh interpreter searches for an osh configuration file, checking
+these locations, in this order:
+
+<ul>
+  <li><tt><b>./.oshrc</b></tt>
+  <li><tt><b>~/.oshrc</b></tt>
+  <li><tt><b>/etc/oshrc</b></tt>
+</ul>
+
+If none of these files exist, then osh will not be able to access any database or cluster.
+<p>
+If the osh configuration file is going to be used for database access, then it may contain
+a plaintext database password. It is therefore good practice to restrict access this file to,
+e.g. set permissions to <tt>600</tt>.
+
+<h2>Structure of the configuration file</h2>
+
+The <tt>.oshrc</tt> file contains Python code. The API for specifying a configuration
+is contained in the module <tt>osh.config</tt>, so <tt>.oshrc</tt> always begins with this
+line:
+
+<pre>
+    from osh.config import *
+</pre>
+
+Database and cluster configuration is done using field and slice notation. For example,
+to specify that the <tt>sql</tt> command connects to
+the <tt>family</tt> database as 'jao':
+
+<pre>
+    osh.sql.family.database = 'family'
+    osh.sql.family.user = 'jao'
+</pre>
+
+<ul>
+<li><tt>osh</tt> is the base configuration object.
+<li><tt>osh.sql</tt> indicates that database connection for the <tt>sql</tt> command is being configured.
+<li><tt>osh.sql.family</tt> means that a database with logical name <tt>family</tt> is being configured.
+<li><tt>osh.sql.family.database = 'family'</tt> means that the actual name of the database, (understood by the database system), is <tt>familydb</tt>.
+<li><tt>osh.sql.family.user = 'jao'</tt> means that the connection to <tt>familydb</tt> is done as user <tt>jao</tt>.
+</ul>
+
+<p>Slice notation is also supported, e.g.
+
+<pre>
+    osh.sql['family'].user = 'jao'
+</pre>
+
+This is useful in case a database or cluster name is known dynamically, or is not
+a legal Python identifier.
+
+<h2>Configuring database access</h2>
+
+Database access is done using the <tt>sql</tt> command, e.g.
+
+<pre>
+    osh sql family 'select count(*) from request' $
+</pre>
+
+<tt>family</tt> is the name of a database profile, specified in <tt>.oshrc</tt>.
+The profile specifies a module implementing the connect method of a DBAPI 2.0 driver, and
+the arguments to the module's <tt>connect</tt> method, e.g.
+
+<pre>
+    osh.sql.family.driver = 'pg8000.dbapi'
+    osh.sql.family.host = 'localhost'
+    osh.sql.family.database = 'familydb'
+    osh.sql.family.user = 'jao'
+    osh.sql.family.password = 'l3tme1n'
+</pre>
+
+This specification results in a connection being created
+as <tt>pg8000.dbapi.connect(host = 'localhost', database = 'familydb',
+user = 'jao', password = 'l3tme1n')</tt>.
+
+<p>The DBAPI driver is not included with osh. It needs to be in your python environment,
+located on PYTHONPATH, in site-packages, or in a location specified by sitecustomize.py.
+
+<p>osh also provides access to postgres databases using the pygresql driver as follows:
+  
+<pre>
+    osh.sql.family.dbtype = 'postgres'
+    osh.sql.family.host = 'localhost'
+    osh.sql.family.db = 'familydb'
+    osh.sql.family.user = 'jao'
+    osh.sql.family.password = 'l3tme1n'
+</pre>
+
+A default database profile can be specified by assigning a value to <tt>osh.sql</tt>, e.g.
+
+<pre>
+    osh.sql = 'family'
+</pre>
+
+If this is done, then the <tt>sql</tt> command can omit the database profile name, e.g.
+
+<pre>
+    osh sql 'select count(*) from request' $
+</pre>
+
+<h2>Cluster configuration</h2>
+
+This command executes a query on each node of cluster <tt>fred</tt>:
+
+<pre>
+    osh @fred [ sql family 'select name, age from person' ] $
+</pre>
+
+Each node of fred's cluster must 
+configure a database profile named <tt>family</tt> in its
+<tt>.oshrc</tt> file.
+<p>
+On the local node (the one on which the above command is entered), the
+cluster <tt>fred</tt> must be configured, e.g.
+
+<pre>
+    osh.remote.fred.hosts = ['192.168.100.101',
+                             '192.168.100.102',
+                             '192.168.100.103']
+</pre>
+
+Access to the cluster is done as <tt>root</tt>. If you want to connect as
+some other user, specify the user as follows:
+
+<pre>
+    osh.remote.fred.user = 'zack'
+</pre>
+
+Remote access is done using ssh, and osh cannot handle any prompts, e.g. for password
+or a passphrase. If you can connect to a host silently using ssh, e.g. by setting
+up an ssh agent, then that will work for osh. If you use the <tt>ssh -i</tt> option,
+then the identity can be specified in <tt>.oshrc</tt>, e.g.
+
+<pre>
+    osh.remote.fred.identity = '~/.ssh/fred.pem'
+</pre>
+
+(You can check your ssh connection using
+the <tt>testssh</tt> command, e.g. <tt>osh @fred [ testssh ] $</tt>.)
+
+<p>When a remote command is run on a cluster, each row of output identifies the
+node that generated the output, e.g.
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sql family 'select name, age from person' ] $
+    ('192.168.100.101', 'hannah', 15)
+    ('192.168.100.101', 'julia', 10)
+    ('192.168.100.102', 'alexander', 16)
+    ('192.168.100.102', 'nathan', 15)
+    ('192.168.100.102', 'zoe', 11)
+    ('192.168.100.103', 'danica', 1)
+</pre>
+
+The <tt>hosts</tt> part of a cluster specification can also be done using a <tt>dict</tt>, in which
+the key is a name for the node, and the value is the IP address, e.g.
+
+<pre>
+    osh.remote.fred.hosts = {'101': '192.168.100.101',
+                             '102': '192.168.100.102',
+                             '103': '192.168.100.103'}
+</pre>
+
+The node names are used in command output in place of IP addresses, e.g.
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sql familydb 'select name, age from person' ] $
+    ('101', 'hannah', 15)
+    ('101', 'julia', 10)
+    ('102', 'alexander', 16)
+    ('102', 'nathan', 15)
+    ('102', 'zoe', 11)
+    ('103', 'danica', 1)
+</pre>
+
+These examples assume that each node of cluster <tt>fred</tt> has
+a <tt>.oshrc</tt> file that configures a database profile
+named <tt>family</tt>. It is also possible to configure database
+access even when each node specifies a different database profile, e.g.
+
+<pre>
+    osh.remote.fred.hosts = {'101': {'host': '192.168.100.101', 'db_profile': 'db1'},
+                             '102': {'host': '192.168.100.102', 'db_profile': 'db2'},
+                             '103': {'host': '192.168.100.103', 'db_profile': 'db3'}}
+</pre>
+
+With this configuration <tt>osh @fred [ sql 'select ...' ] ...</tt>
+accesses <tt>db1</tt> on node <tt>101</tt>, <tt>db2</tt> on node <tt>102</tt>, and <tt>db3</tt> on
+node <tt>103</tt>.
+
+<p>
+The complete rules for selecting a database profile are as follows:
+<ul>
+<li>Local execution (e.g. <tt><b>osh sql ...</b></tt>):
+<ul>
+<li>If profile is specified with sql command, use it.
+<li>If no profile is specified, use the default profile in <tt>.oshrc</tt>.
+</ul>
+<li>Remote execution (e.g. <tt><b>osh @cluster [ sql ... ]</b></tt>):
+<ul>
+<li>If profile is specified with <tt>sql</tt> command, use it, looking up the profile name in <tt>.oshrc</tt> on each node of the cluster.
+<li>If no profile is specified with the <tt>sql</tt> command, and the remote host has a <tt>db_profile</tt> specified (in the cluster's configuration in the local <tt>.oshrc</tt>), use that profile as configured in the <tt>.oshrc</tt> file on the remote host.
+<li>If no profile is specified with the <tt>sql</tt> command, and the remote host has no <tt>db_profile</tt> specified, then use the default database profile from <tt>.oshrc</tt> on the remote host.
+</ul>
+</ul>
+
+<h2>Arbitrary Python code in <tt>.oshrc</tt></h2>
+
+<tt>.oshrc</tt> contains Python code, and any symbols defined in it are available to osh commands.
+For example, this code prints the squares and cubes of the first ten integers:
+
+<pre>
+    <font color='grey'>zack$</font> osh gen 10 ^ f 'x: (x**2, x**3)' $
+</pre>
+
+The same computation can be done by writing a function to compute squares and cubes:
+
+<pre>
+    def square_and_cube(x):
+        return x**2, x**3
+</pre>
+
+and putting this function definition in <tt>.oshrc</tt>. Then, the osh
+command above can be rewritten as:
+
+<pre>
+    <font color='grey'>zack$</font> osh gen 10 ^ f 'x: square_and_cube(x)' $
+</pre>
+
+<h2>Locating user-defined osh commands</h2>
+
+It is easy to write your own osh commands (although the procedure is
+currently not documented).  In order for such commands to be located
+by the osh interpreter, a search path needs to be specified
+in <tt>.oshrc</tt>. For example, suppose you have written a
+command <tt>xyz</tt> and placed its implementation, <tt>xyz.py</tt>,
+in <tt>/usr/local/foobar</tt>. Then you must add this to <tt>.oshrc</tt>:
+
+<pre>
+    osh.path = ['/usr/local/foobar']
+</pre>
+
+or the osh interpreter will not find xyz when used in an osh command sequence.
+
+<p>The value of <tt>osh.path</tt> is a list so that custom commands can be placed in
+any number of directories.
+  
+</body>
+</html>

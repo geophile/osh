@@ -1,0 +1,513 @@
+<html>
+<head><title>Osh 1.0 User's Guide</title></head>
+<body>
+
+<h1>Osh Concepts</h1>
+
+This section discusses the major concepts embodied in osh. While these
+concepts apply to both the command-line and application programming
+interfaces, examples are mostly given in CLI notation.
+
+<h2>Commands and Streams</h2>
+
+An osh <i>command sequence</i> consists of a sequence of osh commands,
+connected by streams. An osh <i>stream</i> carries tuples from one
+command in a sequence to the next. Each osh <i>command</i> reads a
+stream of zero or more tuples, writes a stream of zero or more tuples,
+and may have side-effects. The input stream of the first command of a
+command sequence always has zero tuples.
+
+<p>
+  Sometimes, there is a one-to-one correspondence between tuples in
+  a command's input stream and its output stream. For example,
+  the <tt>f</tt> command applies a function to each input tuple to
+  yield a value written to the output stream. In other cases, a single
+  input tuple may give rise to multiple output tuples or to none at
+  all. Some commands collect inputs, possibly even all inputs, and
+  then emit output later. For example, the <tt>sort</tt>
+  and <tt>unique</tt> commands accumulate all input before generating
+  sorted output, or output with duplicates removed.
+  
+<p>
+  It is a good idea to be aware of how many input tuples a command
+  must accumulate, and avoid situations in which memory requirements
+  may be very high or unbounded. For example, suppose you need to scan
+  some log files, filtering based on a pattern, and sorting matching
+  lines by time. If you sort and then filter, memory requirements
+  would be equal to the volume of all the log files. If you filter
+  first, then you can greatly reduce memory requirements because
+  filtering (done by the <tt>select</tt> command) examines each input,
+  sends it to output or not, and then forgets about it. The amount of
+  data that the <tt>sort</tt> command has to deal with is reduced to
+  the lines that get through the filter.
+
+<h2>Functions</h2>
+
+A number of osh commands have function arguments. For example,
+the <tt>select</tt> command applies its function to each input tuple,
+passing it on to the output stream if and only if the function
+evaluates to true. Example (using the CLI):
+
+<pre>
+    <font color='grey'>zack$</font> osh gen 10 ^ select 'lambda x: (x % 2) == 0' ^ out
+    (0,)
+    (2,)
+    (4,)
+    (6,)
+    (8,)
+</pre>
+
+<tt>gen 10</tt> generates the first ten integers, <tt>0, 1, ...,
+9</tt>.  Each integer is passed to the next command, <tt>select</tt>,
+which applies the function <tt>(x % 2) == 0</tt>, where x is the
+argument to the function. This evalutes to true only for even
+numbers. <tt>out</tt> prints its input to stdout.
+
+<p>The function argument to <tt>select</tt> is a Python lambda
+  expression. When a function is specified in this way -- inside a
+  string literal -- osh permits the keyword <tt>lambda</tt> to be
+  omitted, so <tt>... ^ select 'x: (x % 2) == 0' ^ ...</tt> is
+  also correct.
+
+<p>The osh API also supports both functions contained in strings, as
+  above, and Python expressions evaluating to functions, such as
+  function names and lambda expressions, (i.e. real lambda expressions,
+  not contained in strings). So the example above could be expressed
+  in the API as follows:
+
+<pre>
+    #!/usr/bin/python
+    
+    from osh.api import *
+
+    osh(gen(10), select(lambda x: (x % 2) == 0), out())
+</pre>
+
+or
+
+<pre>
+    #!/usr/bin/python
+    
+    from osh.api import *
+    
+    def even(x):
+        return x % 2 == 0
+    
+    osh(gen(10), select(even), out())
+</pre>
+
+There is one situation in which a function argument must be expressed
+as a string: if the function is going to be executed remotely. The
+reason for this restriction is that remote execution is done by
+pickling command sequences, and objects of type function cannot always
+be pickled.
+
+<p>Osh always pipes tuples between commands.
+If a command writes a single object to a stream, (e.g. the <tt>gen</tt>
+command), then the osh interpreter wraps the object into a 1-tuple. If a command writes a list,
+then the list is not wrapped, but is converted to a tuple of the same size.
+So to be more precise, in the example above,
+osh actually pipes the tuples
+<tt>(0,), (1,), ..., (9,)</tt> from <tt>gen</tt> to <tt>select</tt>.
+The stream coming out of the <tt>select</tt> command comprises the
+tuples <tt>(0,), (2,), (4,), (6,), (8,)</tt>.
+
+<p>If a stream of tuples is passed to a command that has a function
+argument, then the tuple elements are bound to function arguments in
+the usual pythonic way. Example:
+
+<pre>
+    <font color='grey'>zack$</font> osh gen 10 ^ f 'x: (x, x**2)' ^ f 'x, x_squared: (x, x + x_squared)' ^ out
+    (0, 0)
+    (1, 2)
+    (2, 6)
+    (3, 12)
+    (4, 20)
+    (5, 30)
+    (6, 42)
+    (7, 56)
+    (8, 72)
+    (9, 90)
+</pre>
+
+<tt>(0,), (1,), ..., (9,)</tt> are piped to the first <tt>f</tt>
+command, which generates tuples <tt>(x, x**2)</tt> for each input <tt>x</tt>.
+So the output stream from this command contains 2-tuples:
+<tt>(0, 0), (1, 1), ..., (9, 81)</tt>. The elements in each tuple are then bound
+to the arguments of the second <tt>f</tt> command, <tt>x</tt> and <tt>x_squared</tt>.
+So for the <tt>(9, 81)</tt> tuple, <tt>x = 9</tt> and <tt>x_squared = 81</tt>.
+
+<p>
+Arbitrary-length argument lists work as usual. For example,
+suppose you have a file containing CSV (comma-separated values) data,
+in which each row contains 20 items. If you want to add integers in columns 7 and
+18 (0-based) then you could
+invoke <tt>f</tt>, providing a function with 20 arguments, and add the 7th and
+18th items. Or you could use an argument list:
+
+<pre>
+    cat data.csv | osh ^ f 's: s.split(",")' ^ f '*row: int(row[7]) + int(row[18])' ^ out
+</pre>
+
+<tt>cat data.csv</tt> is a host OS command which copies the contents
+of data.csv to stdout. This is piped (by a host OS pipe), to
+osh.
+<tt>osh ^</tt> converts stdin to a stream of 1-tuples, each containing
+one line of input (with the terminal <tt>\n</tt> removed).
+Each such line contains values separated by commas;
+<tt>f 's: s.split(",")'</tt> splits each such line into a tuple of values.
+The next command, <tt>f: '*row: int(row[7]) + int(row[18])'</tt>, assigns the entire tuple
+to <tt>row</tt> instead of assigning each tuple value to one function argument.
+
+<h2>Error and Exception Handling</h2>
+
+An <i>exception handler</i> handles exceptions thrown by osh commands.
+An <i>error handler</i> handles stderr content.
+For example, division by zero raises the <tt>ZeroDivisionError</tt> exception. The default
+exception handler prints a description of the problem to stderr. Example:
+
+<pre>
+    <font color="grey">zack$</font> osh gen 3 ^ f 'x: x / (x-1)' $
+    (0,)
+    f#3[x: x / (x-1)](1):  exceptions.ZeroDivisionError: integer division or modulo by zero
+    (2,)
+</pre>
+
+<tt>gen 3</tt> generates the integers 0, 1, 2. These integers are piped to the function
+<tt>x: x / (x-1)</tt> which raises <tt>ZeroDivisionError</tt> for <tt>x</tt> = 1. The first and
+third lines of output show the expected output for <tt>x</tt> = 0 and 2, printed to stdout.
+The middle line goes to stderr:
+
+<ul>
+
+  <li><tt>f#3</tt> identifies the command that failed (<tt>f</tt>) and
+  an identifier, unique within the command's parse tree. (The parse tree can be
+  seen by running osh with the -v flag.)
+
+  <li>The brackets following the command, <tt>[x: x / (x-1)]</tt>,
+  identify the command's arguments.
+
+  <li><tt>(1)</tt> shows the input that caused the function to raise an exception.
+
+  <li>The exception's class and message are included.
+
+</ul>
+
+<p>
+A similar mechanism is used in case an osh command writes to
+stderr. Each line going to stderr is passed to the error handler.
+The default error handler adds context information and writes to osh's
+stderr. 
+
+<p>
+The default exception and error handlers can be overridden. This can
+be done by invoking <tt>set_exception_handler</tt> and <tt>set_error_handler</tt>
+from <tt>.oshrc</tt>. (See the documentation on the
+module <tt>osh.error</tt>
+for details.)
+
+<h2>Files</h2>
+
+Osh represents files by objects of type <tt>osh.File</tt>, which are created by the
+<tt>ls</tt> command. For example, this command sequence lists the contents of the
+current directory, providing the mode (in octal) and size of each file:
+
+<pre>
+    <font color="grey">zack$</font> osh ls ^ f 'file: (file, oct(file.mode), file.size)' $
+    ('./api.html', '0100644', 8252)
+    ('./cli.html', '0100644', 13338)
+    ('./concepts.html', '0100644', 11242)
+    ('./config.html', '0100644', 8306)
+    ('./index.html', '0100644', 506)
+    ('./installation.html', '0100644', 4204)
+    ('./intro.html', '0100644', 10103)
+</pre>
+
+<h2>Processes</h2>
+
+Osh represents processes by objects of type <tt>osh.Process</tt>, which are created
+by the <tt>ps</tt> command. For example, this command sequence lists
+python processes, providing the pid and command line of each:
+
+<pre>
+    <font color='grey'>zack$</font> osh ps ^ select 'p: "python" in p.command_line' ^ f 'p: (p.pid, p.command_line)' $
+    (2285, '/usr/bin/python /usr/sbin/yum-updatesd ')
+    (2575, '/usr/bin/python -tt /usr/bin/puplet ')
+    (2648, '/usr/bin/python /usr/bin/osh ps ^ select p: "python" in p.command_line ^ f p: (p.pid, p.command_line) $ ')
+</pre>
+
+
+<h2>Configuration</h2>
+
+<p>A number of osh commands require configuration information. For example, osh has the
+  concept of a <i>cluster</i>. A cluster has a logical name, and a set of nodes.
+  Each node has a logical name and an address, and access to the nodes is carried out
+  as some user, (typically root). All this information is specified in the osh
+  configuration file, typically <tt>~/.oshrc</tt>.
+
+<p>Database access also requires configuration. Each database has a logical name, for
+  use in the osh <tt>sql</tt> command. Database configuration identifies a database driver and
+  specifies connection information.
+
+<p>Configuration information is specified as python code. For example, here is a typical
+  configuration file:
+
+<pre>
+    from osh.config import *
+    
+    osh.sql = 'family'
+    osh.sql.family.driver = 'pg8000.dbapi'
+    osh.sql.family.host = 'localhost'
+    osh.sql.family.database = 'mydb'
+    osh.sql.family.user = 'jao'
+    osh.sql.family.password = 'jao'
+    
+    osh.remote.fred.hosts = {
+        '101': '192.168.100.101',
+        '102': '192.168.100.102',
+        '103': '192.168.100.103'
+    }
+
+    def factorial(x):
+        if x == 0:
+            return 1
+        else:
+            return x * factorial(x - 1)
+</pre>
+
+The configuration file must start by including the symbols defined in osh.config.
+
+<p>The <tt>family</tt> database is configured as follows:
+<ul>
+    <li><b><tt>osh.sql = 'family'</tt></b> Specifies that <tt>family</tt> is the
+      default database for the osh <tt>sql</tt> command.
+    <li><b><tt>osh.sql.family.driver = 'pg8000.dbapi'</tt></b> The driver module
+      containing the <tt>connect</tt> function. This module must be reachable in
+      your python environment, (e.g. via PYTHONPATH, site-packages, or sitecustomize.py).
+      <tt>osh.sql.family</tt> specifies that we are configuring access to the
+      database whose logical name is <tt>family</tt>
+    <li><b><tt>osh.sql.family.host = 'localhost'</tt></b> <tt>pg8000.dbapi.connect</tt>
+      has a host argument; this specifies its value.
+    <li><b><tt>osh.sql.family.database = 'mydb'</tt></b> The <tt>database</tt> argument
+      to <tt>connect</tt>.
+    <li><b><tt>osh.sql.family.user = 'jao'</tt></b> The <tt>user</tt> argument to <tt>connect</tt>.
+    <li><b><tt>osh.sql.family.password = 'jao'</tt></b> The <tt>password</tt> argument to <tt>connect</tt>.
+</ul>
+
+<p>Note that the exact properties specified for database configuration will vary depending
+  on the driver.
+
+<p>The osh configuration also specifies a cluster named <tt>fred</tt> with three nodes. The value
+  of the <tt>osh.remote.fred.hosts</tt> specifies the logical name and address of each cluster node.
+
+<p>The osh configuration file is just python code.
+  In the example above, the <tt>factorial</tt> function is defined.
+  Any symbols defined are available for use
+  in osh command sequences, e.g.
+
+<pre>
+    <font color="grey">zack$</font> osh gen 10 ^ f 'x: (x, factorial(x))' $
+    (0, 1)
+    (1, 1)
+    (2, 2)
+    (3, 6)
+    (4, 24)
+    (5, 120)
+    (6, 720)
+    (7, 5040)
+    (8, 40320)
+    (9, 362880)
+</pre>  
+
+<h2>Database Access</h2>
+
+The osh <tt>sql</tt> command provides access to relational databases. The connection to the database
+is described in the osh configuration file. Any DBAPI-compliant driver should work with osh.
+
+<p>For a <tt>select</tt> statement, each row of the result gives rise to one tuple. For example, if
+  your database has a <tt>person</tt> table, with columns <tt>name</tt> (varchar) and <tt>age</tt>
+  (int), then it can be
+  queried like this:
+
+<pre>
+    <font color="grey">zack$</font> osh sql 'select * from person' $
+    ('hannah', 15)
+    ('julia', 10)
+    ('alexander', 16)
+    ('nathan', 15)
+    ('zoe', 11)
+    ('danica', 1)
+</pre>
+
+Note that the tuples have string and int components, matching the types declared in
+the database.
+
+<p>For other kinds of statements, output from the SQL command depends on the driver.
+  SQL queries can also have inputs, indicated by python string formatting notation. For
+  example, suppose you have a file containing input to the person table, e.g. 'hannah 15'.
+  The following osh command sequence reads the file, splits out the fields, and binds them
+  to the SQL statement:
+
+<pre>
+    <font color="grey">zack$</font> cat persons.txt | osh ^ \
+          f 's: s.split()' ^ f 'name, age: (name, int(age))' ^ sql 'insert into person values(%s, %s)'
+</pre>
+
+<tt>cat persons.txt | osh</tt> pipes each line of input to osh (using OS pipes). <tt>osh ^</tt>
+converts stdin into an osh stream whose tuples each contain one string. The first <tt>f</tt>
+command splits the line into two fields, and the second <tt>f</tt> command converts the
+second field (age) to an int. The tuples piped to the <tt>sql</tt> command then have names
+and ages, correctly typed as string and int respectively.
+
+<h2>Remote and Parallel Execution</h2>
+
+<p>An osh command sequence normally executes in a single thread. Multiple thread of execution
+  may be introduced by using the <tt>fork</tt> command. <tt>fork</tt> has two arguments: a
+  thread generator, and a sequence of commands to be executed on each thread. The thread generator is
+  used to create a number of threads, and to generate a unique <i>label</i> for each thread.
+
+<p>The thread generator can be any of the following:
+  <ul>
+    <li><b>A positive integer:</b> If the thread generator is <i>n</i>, then <i>n</i>
+      threads will be created. The thread labels are 0, 1, ..., <i>n</i> - 1.
+    <li><b>A sequence:</b> A thread is created for and labelled with each item in the sequence.
+    <li><b>A cluster name:</b> A thread is created for each node in the named cluster.
+      The thread label is the name of the node. (Cluster nodes and node names are
+      specified in the osh configuration file, .oshrc.) The thread does not execute the
+      command locally, as in the cases above, but on the node corresponding to the thread's label.
+    <li><b>A function:</b> The function is evaluated and is expected to evaluate to a positive integer,
+      sequence, or cluster name. Execution then proceeds as in the above three cases.
+  </ul>
+
+<p><b>Parallel execution example:</b>
+
+<pre>
+    <font color='grey'>zack$</font> time osh @5 [ sh 'sleep 3; echo hello' ] $
+    (0, 'hello')
+    (1, 'hello')
+    (2, 'hello')
+    (3, 'hello')
+    (4, 'hello')
+    
+    real	0m3.164s
+    user	0m0.090s
+    sys	0m0.106s
+</pre>
+
+<ul>
+  <li><b><tt>osh @5 [ ... ]</tt></b> generates 5 threads, with labels 0, 1, 2, 3, 4, and executes
+    the bracketed command on each.
+  <li><b><tt>time ...</tt></b> is the standard Unix time command.
+  <li><b><tt>sh</tt></b> is an osh command for escaping to the shell. 
+  <li><b><tt>sleep 3; echo hello</tt></b> <tt>sh</tt> is used to execute this sequence of
+    command in the host OS -- sleep for 3 seconds and then print <tt>hello</tt>.
+</ul>
+
+<p>Each line of output contains a thread id and output from the executed command. E.g. <tt>(2, 'hello')</tt>
+  is the output produced by the thread with label 2. Following output from the osh command is output
+  from <tt>time</tt>. This part of the output shows that the five threads executed in parallel. Each
+  thread slept for 3 seconds, and the total running time of the entire osh command is just over 3 seconds.
+
+<p><b>Remote execution example:</b>
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sh '/sbin/ifconfig | grep 192 ] $
+    ('101', '          inet addr:192.168.100.101  Bcast:192.168.100.255  Mask:255.255.255.0')
+    ('102', '          inet addr:192.168.100.102  Bcast:192.168.100.255  Mask:255.255.255.0')
+    ('103', '          inet addr:192.168.100.103  Bcast:192.168.100.255  Mask:255.255.255.0')
+</pre>
+
+The cluster <tt>fred</tt> has been configured with three nodes, at IP addresses
+192.168.100.101-103. Each node's name is the last octet of its address. The above command
+runs remotely the OS command <tt>/sbin/ifconfig | grep 192</tt>, (reporting
+the IP address of the node executing the command). The output demonstrates
+that the command was run on each node of the specified cluster.
+
+<h2>Aggregating Partial Results from Cluster Nodes</h2>
+
+<p>When working with a cluster, it is often useful to retrieve or compute
+data from each node and then combine the results. The simplest way of
+doing this is to use osh's remote execution capabilities, which lists
+the results from each node in no particular order, (results from
+different nodes may be interleaved). For example, suppose that each
+node of cluster <tt>fred</tt> has a database containing a table listing
+information on files.
+The table is named <tt>file</tt> and has three columns:
+
+<ul>
+  <li><b>path:</b> File location.
+  <li><b>hash:</b> MD5 hash of file content.
+  <li><b>size:</b> Size of file in bytes.
+</ul>
+
+A listing of all files can be done as follows:
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sql 'select path, hash, size from file' ] $
+    ('101', '/2007/jan/15/img0419.jpg', '89d95cc3a3933f9107070d6114427758', 4605997)
+    ('103', '/documents/marketing/xyz3000_white_paper.doc, '7ab31e12597926be67d5adecd463d028', 601887)
+    ('103', '/documents/marketing/xyz3000_specs.doc, '25e14bb586b62f66bd350a6b09e5ca0f', 78901)
+    ('102', '/documents/legal/nda.pdf', 'd0f05c5b57d152584cea9b8e8884b277', 889128)
+    ...
+</pre>
+
+<p>The first element of each tuple identifies the node that provided the tuple.
+
+<p>Another approach to combining results is to compute summary information, e.g. counting
+the files on all nodes and computing their total size. This can be done on each node in sql,
+e.g. <tt>select count(*), sum(size) from file</tt>. The osh aggregation command can be used
+to combine the results from these queries:
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sql 'select count(*), sum(size) from file' ] ^ \
+          agg '(0, 0)' \
+              'total_count, total_size, node, node_count, node_size: total_count + node_count, total_size + node_size' $
+    (9415687, 11624297350072)
+</pre>
+
+<p><tt>agg</tt> is the aggregation command. <tt>(0, 0)</tt> is the
+initial value of the accumulator; the first element will accumulate
+the count, and the second element is for the total size.  The
+aggregation is done by a function <tt>total_count, total_size, node,
+node_count, node_size: total_count + node_count, total_size +
+node_size</tt> The first two argument, <tt>total_count, total_size</tt>
+represent the count and size accumulated so far. The remaining
+arguments, <tt>node, node_count, node_size</tt> represent input
+from one of the nodes. The function computes an updated accumulator.
+
+<p>Another common approach to combining results from nodes is to sort.
+  For example, if two files have the same MD5 hash, then it is very
+  likely that those files have the same content. To find all potential
+  duplicates we can retrieve all rows and sort by MD5; the duplicates
+  are then next to each other in the output:
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sql 'select path, hash from file' ] ^ \
+          sort 'node, path, hash: hash' $
+</pre>
+
+<p>The <tt>sort</tt> command stores all input from all nodes and sorts
+  by hash. (The argument to <tt>sort</tt> is a function that takes a
+  tuple of input from a node and selects the hash.)
+
+<p>The problem with this approach is that it requires the entire data
+  set, from all nodes to be accumulated and sorted. This could consume
+  a lot of memory, and could easily result in the Python process
+  swapping, hurting performance.
+
+<p>A better approach is to have each node sort its own data (in parallel), and then
+  merge. This can be done in osh as follows:
+
+<pre>
+    <font color='grey'>zack$</font> osh @fred [ sql 'select path, hash from file order by hash' // 'path, hash: hash' ] $
+</pre>
+
+<p>Notice that the sql statement has been modified by adding <tt>order by
+  hash</tt>. <tt>//</tt> indicates that the results from the nodes are
+  to be merged. The function following the merge operator, <tt>path,
+  hash: hash</tt> indicates that the merge operator expects inputs to
+  be ordered by hash. The merge will combine the sorted inputs into a
+  single sequence ordered by <tt>hash</tt>.
+
+</body>
+</html>

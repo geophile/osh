@@ -1,0 +1,133 @@
+<html>
+<head><title>Osh 1.0 User's Guide</title></head>
+<body>
+
+<h1>Osh Installation</h1>
+
+To use osh locally, follow the instructions for <a href="installation.html#local">Local Installation</a>.
+Once osh is installed locally, you can install to all nodes of a cluster by following the
+instructions for <a href="installation.html#cluster">Installation to a Cluster</a>.
+
+<a name="local"/><h2>Local Installation</h2>
+
+In order to run osh, you need:
+
+<ul>
+  <li>A Linux or OS X machine running at
+least Python 2.3.  (Other operating systems and earlier versions of
+Python may work.)
+  <li>The osh distribution, <tt>osh-1.0.3.tar.gz</tt>, which can be obtained
+    <a href="http://geophile.com/osh/osh-1.0.3.tar.gz">here</a>.
+</ul>
+
+Follow these steps to install osh:
+
+<ul>
+  <li>Create an installation directory and cd into it.
+  <li>In the installation directory, unpack the osh distribution: <tt>tar xzvf osh-1.0.3.tar.gz</tt>
+  <li>You should now have a directory named <tt>osh-1.0.3</tt>. cd into it.
+  <li>Run this command: <tt>sudo python ./setup.py install</tt>
+</ul>
+
+Once installation is complete, you can delete the installation directory you created
+and everything in it.
+
+<p>Test that installation succeeded by running a simple osh command, e.g.
+
+<pre>
+    <font color="grey">zack$ </font>osh gen 3 $
+    0
+    1
+    2
+</pre>
+
+<a name="cluster"/><h2>Installation to a Cluster</h2>
+
+Before you can use the remote execution capabilities of osh, you must ensure that osh
+is installed on the target cluster.
+
+<p><b>Configure cluster in <tt>.oshrc</tt></b>:
+
+Suppose that you want to configure a cluster named <tt>fred</tt> containing these nodes:
+
+<pre>
+    192.168.100.101
+    192.168.100.102
+    192.168.100.103
+</pre>
+
+osh configuration is specified in <tt>~/.oshrc</tt>. Create this file if necessary and make
+sure it contains these lines:
+
+<pre>
+from osh.config import *
+
+osh.remote.fred.user = 'root'
+osh.remote.fred.hosts = {
+    '101': '192.168.100.101',
+    '102': '192.168.100.102',
+    '103': '192.168.100.103',
+    }
+</pre>
+
+This says that <tt>fred</tt> will be accessed as root (via ssh), and specifies
+the IP addresses of the cluster's nodes. (See <a href="config.html">Configuring osh</a>
+for more details.)
+
+<p><b>Check connectivity over ssh:</b>
+
+Access to a cluster is done over ssh. You must configure an ssh agent so that access via <tt>root</tt>
+does not prompt for a password or generate any diagnostic messages. For example, to check
+connectivity to cluster <tt>fred</tt>:
+
+<pre>
+    <font color="grey">zack$</font> osh @fred [ testssh ] $
+    '101' stderr: Warning: Permanently added 'localhost' (RSA) to the list of known hosts.
+    '101' stdout: hello
+    '102' stderr: Warning: Permanently added 'localhost' (RSA) to the list of known hosts.
+    '102' stdout: hello
+    '103' stderr: Warning: Permanently added 'localhost' (RSA) to the list of known hosts.
+    '103' stdout: hello
+</pre>
+
+Each node of cluster <tt>fred</tt> was tested, and because it was the first ssh session
+to each node, a warning was printed on <tt>stderr</tt>. The test command used by <tt>testssh</tt>
+is <tt>echo hello</tt>, and that output is reported also.
+
+The next run of <tt>testssh</tt> does not have any output on <tt>stderr</tt> because
+the nodes are now registered in <tt>~/.ssh/known_hosts</tt>:
+
+<pre>
+    <font color="grey">zack$</font> osh @fred [ testssh ] $
+    '101' stdout: hello
+    '102' stdout: hello
+    '103' stdout: hello
+</pre>
+
+osh is now ready to install to the cluster.
+
+<p><b>Install to cluster:</b>
+
+To install osh on cluster <tt>fred</tt> run this command:
+
+<pre>
+    <font color="grey">zack$</font> osh @fred [ installosh ]
+</pre>
+
+This must be run from a shell capable of running curses, (e.g. not an Emacs shell).
+You will see a table showing installation progress for each node. 
+
+<p><b>Check success</b>:
+
+Once installation is complete, you can run remote osh commands. For example, this command
+will report the osh version on each node:
+
+<pre>
+    <font color="grey">zack$</font> osh @fred [ version ] $
+    ('101', '1.0.3')
+    ('102', '1.0.3')
+    ('103', '1.0.3')
+</pre>
+
+</body>
+</html>

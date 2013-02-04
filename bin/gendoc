@@ -1,0 +1,39 @@
+#!/usr/bin/python
+
+import os
+import sys
+
+import osh
+
+EXCLUDES = [
+    'apiparser',
+    'args',
+    'cliparser',
+    'cluster',
+    'config',
+    'core',
+    'dbapi',
+    'dbapi',
+    'error',
+    'external',
+    'interface',
+    'loader',
+    'merge',
+    'oshthread',
+    'postgres',
+    'priorityqueue',
+    'progtrack',
+    'protocol',
+    'runlocal',
+    'spawn',
+    'sqladapter',
+    'sqlpostgres',
+    'tpg',
+    'tpg',
+    'types',
+    'util'
+    ]
+
+COMMAND = 'epydoc -v --no-private --no-imports --name osh --url http://geophile.com/osh -o $OSH_BASE/docs/web/ref --exclude="(%s)" osh' % '|'.join(EXCLUDES)
+
+os.system(COMMAND)

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>osh.command.agg</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="osh-module.html">Package&nbsp;osh</a> ::
+        <a href="osh.command-module.html">Package&nbsp;command</a> ::
+        Module&nbsp;agg
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="osh.command.agg-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="osh.command.agg-module.html">Module osh.command.agg</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># osh</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) Jack Orenstein &lt;jao@geophile.com&gt;</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># This program is free software; you can redistribute it and/or modify</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># the Free Software Foundation; either version 2 of the License, or</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># (at your option) any later version.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"># This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># GNU General Public License for more details.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># along with this program; if not, write to the Free Software</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment"># Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">"""C{agg [-r] [[-g|-c] GROUPING_FUNCTION] INITIAL_VALUE AGGREGATION_FUNCTION}</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">Aggregates objects from the input stream. If C{GROUPING_FUNCTION} is omitted, then</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">one output object is generated by initializing an accumulator to C{INITIAL_VALUE}</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">and then combining the accumulator with input objects using C{AGGREGATION_FUNCTION}.</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">C{AGGREGATION_FUNCTION} takes two inputs, the current value of the accumulator and</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">an object from the input stream.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">Example: If the input objects are integers C{1, 2, 3}, then the sum of the integers</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">is computed as follows::</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    ... ^ agg 0 'sum, x: sum + x'</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">which yields C{(6,)}.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">If C{GROUPING_FUNCTION} is specified, then a set of accumulators is maintained,</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">one for each value of C{GROUPING_FUNCTION}. Each output object is a tuple with</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">two parts, the group value and the accumulated value for the group.</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">Example: If the input objects are C{('a', 1), ('a', 2), ('b', 3), ('b', 4)}, then</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">the sum of ints for each string is computed as follows::</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">    ... ^ agg -g 'x, y: x' 0 'sum, x, y: sum + y'</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">which yields C{('a', 3), ('b', 7)}.</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">If the grouping function is specified with the C{-g} flag, then agg generates its</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">output when the input stream has ended. (It has to, because group members map</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">appear in any order.) In some situations however, group members appear consecutively,</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">and it is useful to get output earlier. If group members are known to be consecutive,</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">then the group function can be specified using the C{-c} flag.</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">If the C{-r} flag is specified, then one output object is generated for each input object;</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">the output object contains the value of the accumulator so far. The accumulator appears</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">in the output row before the inputs. For example, if the input stream contains C{1, 2, 3},</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">then the running total can be computed as follows::</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    ... ^ agg -r 0 'sum, x: sum + x' ^ ...</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">The output stream would be C{(1, 1), (3, 2), (6, 3)}. In the last output object, C{6} is the sum</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring">of the current input (C{3}) and all preceding inputs (C{1, 2}).</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">The C{-r} flag can also be used with grouping. For example, if the input objects are</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">C{('a', 1), ('a', 2), ('b', 3), ('b', 4)}, then the running totals for the strings would</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">be computed as follows::</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">    ... ^ agg -r -g 'x, y: x' 0 'sum, x, y: sum + y' ^ ...</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">The output stream would be C{(1, 'a', 1), (3, 'a', 2), (3, 'b', 3), (7, 'b', 4)}.</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">I.e., the running total is reinitialized to 0 for each group.</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Package osh=osh-module.html,Function osh.api.osh()=osh.api-module.html#osh"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-0', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt class="py-name">core</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-1" class="py-name"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-1', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Function osh.command.remoteinstall.args()=osh.command.remoteinstall-module.html#args"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-2', 'args', 'link-2');">args</a></tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-3" class="py-name"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-3', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Module osh.function=osh.function-module.html"><a title="osh.function" class="py-name" href="#" onclick="return doclink('link-4', 'function', 'link-4');">function</a></tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-name">_wrap_if_necessary</tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-5', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt class="py-name">core</tt><tt class="py-op">.</tt><tt class="py-name">wrap_if_necessary</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-name">create_function</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-6', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="osh.function" class="py-name" href="#" onclick="return doclink('link-7', 'function', 'link-4');">function</a></tt><tt class="py-op">.</tt><tt class="py-name">_create_function</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-name">Option</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-8', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-9', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">Option</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-comment"># CLI</tt> </tt>
+<a name="_agg"></a><div id="_agg-def"><a name="L79"></a><tt class="py-lineno"> 79</tt> <a class="py-toggle" href="#" id="_agg-toggle" onclick="return toggle('_agg');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg-module.html#_agg">_agg</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_agg-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_agg-expanded"><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">_Agg</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-comment"># API</tt> </tt>
+<a name="agg"></a><div id="agg-def"><a name="L83"></a><tt class="py-lineno"> 83</tt> <a class="py-toggle" href="#" id="agg-toggle" onclick="return toggle('agg');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg-module.html#agg">agg</a><tt class="py-op">(</tt><tt class="py-param">initial_value</tt><tt class="py-op">,</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-param">aggregator</tt><tt class="py-op">,</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-param">group</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-param">consecutive</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-param">running</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="agg-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="agg-expanded"><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">    <tt class="py-docstring">"""Combine inputs into a smaller number of outputs. If neither C{group} nor</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring">    C{consecutive} is specified, then there is one accumulator, initialized to</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">    C{initial_value}. The C{aggregator} function is used to combine the current value</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">    of the accumulator with the input to yield the next value of the accumulator.</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring">    The arguments to C{aggregator} are the elements of the accumulator followed</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring">    by the elements of one piece of input.</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">    If C{group} is specified, then there is one accumulator for each group value, defined</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring">    by applying the function C{group} to each input. C{consecutive} is just like C{group}</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">    except that it is assumed that group values are adjacent in the input sequence.</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">    At most one of C{group} and C{consecutive} may be specified. If C{running} is C{false},</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">    then output contains one object per group, containing the aggregate value.</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">    (If neither C{group} nor C{consecutive} are provided, then there is just one group,</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">    representing the aggregate for the entire input stream.) If C{running} is true,</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring">    then each the aggregate value for the group is written out with each input object --</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring">    i.e., the output contains "running totals". In this case, the aggregate values appear</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring">    before the input values in the output object.</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt id="link-10" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-10', 'args', 'link-2');">args</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">initial_value</tt><tt class="py-op">,</tt> <tt class="py-name">aggregator</tt><tt class="py-op">]</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">group</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt id="link-11" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-11', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">Option</tt><tt class="py-op">(</tt><tt class="py-string">'-g'</tt><tt class="py-op">,</tt> <tt class="py-name">group</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">consecutive</tt><tt class="py-op">:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt id="link-12" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-12', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">Option</tt><tt class="py-op">(</tt><tt class="py-string">'-c'</tt><tt class="py-op">,</tt> <tt class="py-name">consecutive</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">running</tt><tt class="py-op">:</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt id="link-13" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-13', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">Option</tt><tt class="py-op">(</tt><tt class="py-string">'-r'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">_Agg</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">process_args</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt id="link-14" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-14', 'args', 'link-2');">args</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt>
+<a name="_Agg"></a><div id="_Agg-def"><a name="L114"></a><tt class="py-lineno">114</tt> <a class="py-toggle" href="#" id="_Agg-toggle" onclick="return toggle('_Agg');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="osh.command.agg._Agg-class.html">_Agg</a><tt class="py-op">(</tt><tt class="py-base-class">osh</tt><tt class="py-op">.</tt><tt class="py-base-class">core</tt><tt class="py-op">.</tt><tt class="py-base-class">Op</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_Agg-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_Agg-expanded"><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">    <tt class="py-name">_aggregate</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">    <tt class="py-comment"># object interface</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"> </tt>
+<a name="_Agg.__init__"></a><div id="_Agg.__init__-def"><a name="L121"></a><tt class="py-lineno">121</tt> <a class="py-toggle" href="#" id="_Agg.__init__-toggle" onclick="return toggle('_Agg.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._Agg-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_Agg.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_Agg.__init__-expanded"><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt id="link-15" class="py-name"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-15', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt class="py-name">core</tt><tt class="py-op">.</tt><tt class="py-name">Op</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method osh.command.fork.FunctionStore.__init__()=osh.command.fork.FunctionStore-class.html#__init__,Method osh.file.File.__init__()=osh.file.File-class.html#__init__,Method osh.function.NotAFunctionException.__init__()=osh.function.NotAFunctionException-class.html#__init__,Method osh.process.Process.__init__()=osh.process.Process-class.html#__init__"><a title="osh.command.fork.FunctionStore.__init__
+osh.file.File.__init__
+osh.function.NotAFunctionException.__init__
+osh.process.Process.__init__" class="py-name" href="#" onclick="return doclink('link-16', '__init__', 'link-16');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-string">'g:c:r'</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">,</tt> <tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">    <tt class="py-comment"># BaseOp interface</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"> </tt>
+<a name="_Agg.doc"></a><div id="_Agg.doc-def"><a name="L127"></a><tt class="py-lineno">127</tt> <a class="py-toggle" href="#" id="_Agg.doc-toggle" onclick="return toggle('_Agg.doc');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._Agg-class.html#doc">doc</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_Agg.doc-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_Agg.doc-expanded"><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">__doc__</tt> </tt>
+</div><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"> </tt>
+<a name="_Agg.setup"></a><div id="_Agg.setup-def"><a name="L130"></a><tt class="py-lineno">130</tt> <a class="py-toggle" href="#" id="_Agg.setup-toggle" onclick="return toggle('_Agg.setup');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._Agg-class.html#setup">setup</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_Agg.setup-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_Agg.setup-expanded"><a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt id="link-17" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-17', 'args', 'link-2');">args</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-18', 'args', 'link-2');">args</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-name">grouping_function</tt> <tt class="py-op">=</tt> <tt id="link-19" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-19', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">function_arg</tt><tt class="py-op">(</tt><tt class="py-string">'-g'</tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-name">consecutive_grouping_function</tt> <tt class="py-op">=</tt> <tt id="link-20" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-20', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">function_arg</tt><tt class="py-op">(</tt><tt class="py-string">'-c'</tt><tt class="py-op">)</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-name">running_totals</tt> <tt class="py-op">=</tt> <tt id="link-21" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-21', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">flag</tt><tt class="py-op">(</tt><tt class="py-string">'-r'</tt><tt class="py-op">)</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">running_totals</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-name">running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-name">initial_value</tt> <tt class="py-op">=</tt> <tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt id="link-22" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-22', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">next_eval</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-name">aggregation_function</tt> <tt class="py-op">=</tt> <tt id="link-23" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-23', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">next_function</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">grouping_function</tt> <tt class="py-keyword">and</tt> <tt class="py-name">consecutive_grouping_function</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">usage</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">initial_value</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt> <tt class="py-keyword">or</tt> <tt class="py-name">aggregation_function</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">usage</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-24" class="py-name"><a title="osh.command.remoteinstall.args" class="py-name" href="#" onclick="return doclink('link-24', 'args', 'link-2');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">has_next</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">usage</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">grouping_function</tt> <tt class="py-keyword">and</tt> <tt class="py-name">consecutive_grouping_function</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">usage</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">grouping_function</tt><tt class="py-op">:</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate</tt> <tt class="py-op">=</tt> <tt class="py-name">_GroupingAggregate</tt><tt class="py-op">(</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">,</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                <tt class="py-name">running_totals</tt><tt class="py-op">,</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                <tt class="py-name">grouping_function</tt><tt class="py-op">,</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                <tt class="py-name">initial_value</tt><tt class="py-op">,</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                <tt class="py-name">aggregation_function</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">consecutive_grouping_function</tt><tt class="py-op">:</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate</tt> <tt class="py-op">=</tt> <tt class="py-name">_ConsecutiveGroupingAggregate</tt><tt class="py-op">(</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">,</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">                <tt class="py-name">running_totals</tt><tt class="py-op">,</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">                <tt class="py-name">consecutive_grouping_function</tt><tt class="py-op">,</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">                <tt class="py-name">initial_value</tt><tt class="py-op">,</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">                <tt class="py-name">aggregation_function</tt><tt class="py-op">)</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate</tt> <tt class="py-op">=</tt> <tt class="py-name">_NonGroupingAggregate</tt><tt class="py-op">(</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">,</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                <tt class="py-name">running_totals</tt><tt class="py-op">,</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                <tt class="py-name">initial_value</tt><tt class="py-op">,</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-name">aggregation_function</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"> </tt>
+<a name="_Agg.receive"></a><div id="_Agg.receive-def"><a name="L168"></a><tt class="py-lineno">168</tt> <a class="py-toggle" href="#" id="_Agg.receive-toggle" onclick="return toggle('_Agg.receive');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._Agg-class.html#receive">receive</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_Agg.receive-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_Agg.receive-expanded"><a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate</tt><tt class="py-op">.</tt><tt class="py-name">receive</tt><tt class="py-op">(</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"> </tt>
+<a name="_Agg.receive_complete"></a><div id="_Agg.receive_complete-def"><a name="L171"></a><tt class="py-lineno">171</tt> <a class="py-toggle" href="#" id="_Agg.receive_complete-toggle" onclick="return toggle('_Agg.receive_complete');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._Agg-class.html#receive_complete">receive_complete</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_Agg.receive_complete-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_Agg.receive_complete-expanded"><a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate</tt><tt class="py-op">.</tt><tt class="py-name">receive_complete</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
+<a name="_GroupingAggregate"></a><div id="_GroupingAggregate-def"><a name="L174"></a><tt class="py-lineno">174</tt> <a class="py-toggle" href="#" id="_GroupingAggregate-toggle" onclick="return toggle('_GroupingAggregate');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="osh.command.agg._GroupingAggregate-class.html">_GroupingAggregate</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_GroupingAggregate-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_GroupingAggregate-expanded"><a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">    <tt class="py-name">_running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">    <tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">    <tt class="py-name">_group_function</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">    <tt class="py-name">_initial_value</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">    <tt class="py-name">_aggregate_function</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">    <tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"> </tt>
+<a name="_GroupingAggregate.__init__"></a><div id="_GroupingAggregate.__init__-def"><a name="L182"></a><tt class="py-lineno">182</tt> <a class="py-toggle" href="#" id="_GroupingAggregate.__init__-toggle" onclick="return toggle('_GroupingAggregate.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._GroupingAggregate-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">command</tt><tt class="py-op">,</tt> <tt class="py-param">running_totals</tt><tt class="py-op">,</tt> <tt class="py-param">group_function</tt><tt class="py-op">,</tt> <tt class="py-param">initial_value</tt><tt class="py-op">,</tt> <tt class="py-param">aggregate_function</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_GroupingAggregate.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_GroupingAggregate.__init__-expanded"><a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">running_totals</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt id="link-25" class="py-name" targets="Package osh.command=osh.command-module.html"><a title="osh.command" class="py-name" href="#" onclick="return doclink('link-25', 'command', 'link-25');">command</a></tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group_function</tt> <tt class="py-op">=</tt> <tt class="py-name">group_function</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_initial_value</tt> <tt class="py-op">=</tt> <tt class="py-name">initial_value</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate_function</tt> <tt class="py-op">=</tt> <tt class="py-name">aggregate_function</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+</div><a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"> </tt>
+<a name="_GroupingAggregate.receive"></a><div id="_GroupingAggregate.receive-def"><a name="L190"></a><tt class="py-lineno">190</tt> <a class="py-toggle" href="#" id="_GroupingAggregate.receive-toggle" onclick="return toggle('_GroupingAggregate.receive');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._GroupingAggregate-class.html#receive">receive</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_GroupingAggregate.receive-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_GroupingAggregate.receive-expanded"><a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-name">group</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group_function</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">        <tt class="py-name">sum</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">group</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_initial_value</tt><tt class="py-op">)</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">        <tt class="py-name">tuple_object</tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">        <tt class="py-name">new_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate_function</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">sum</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple_object</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">[</tt><tt class="py-name">group</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">new_sum</tt><tt class="py-op">)</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">:</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">new_sum</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple_object</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"> </tt>
+<a name="_GroupingAggregate.receive_complete"></a><div id="_GroupingAggregate.receive_complete-def"><a name="L199"></a><tt class="py-lineno">199</tt> <a class="py-toggle" href="#" id="_GroupingAggregate.receive_complete-toggle" onclick="return toggle('_GroupingAggregate.receive_complete');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._GroupingAggregate-class.html#receive_complete">receive_complete</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_GroupingAggregate.receive_complete-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_GroupingAggregate.receive_complete-expanded"><a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">:</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">group</tt><tt class="py-op">,</tt> <tt class="py-name">sum</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">group</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">sum</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send_complete</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"> </tt>
+<a name="_ConsecutiveGroupingAggregate"></a><div id="_ConsecutiveGroupingAggregate-def"><a name="L205"></a><tt class="py-lineno">205</tt> <a class="py-toggle" href="#" id="_ConsecutiveGroupingAggregate-toggle" onclick="return toggle('_ConsecutiveGroupingAggregate');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="osh.command.agg._ConsecutiveGroupingAggregate-class.html">_ConsecutiveGroupingAggregate</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ConsecutiveGroupingAggregate-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_ConsecutiveGroupingAggregate-expanded"><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">    <tt class="py-name">_running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">    <tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">    <tt class="py-name">_group_function</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">    <tt class="py-name">_initial_value</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">    <tt class="py-name">_aggregate_function</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">    <tt class="py-name">_group</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">    <tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"> </tt>
+<a name="_ConsecutiveGroupingAggregate.__init__"></a><div id="_ConsecutiveGroupingAggregate.__init__-def"><a name="L214"></a><tt class="py-lineno">214</tt> <a class="py-toggle" href="#" id="_ConsecutiveGroupingAggregate.__init__-toggle" onclick="return toggle('_ConsecutiveGroupingAggregate.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._ConsecutiveGroupingAggregate-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">command</tt><tt class="py-op">,</tt> <tt class="py-param">running_totals</tt><tt class="py-op">,</tt> <tt class="py-param">group_function</tt><tt class="py-op">,</tt> <tt class="py-param">initial_value</tt><tt class="py-op">,</tt> <tt class="py-param">aggregate_function</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ConsecutiveGroupingAggregate.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_ConsecutiveGroupingAggregate.__init__-expanded"><a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">running_totals</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name"><a title="osh.command" class="py-name" href="#" onclick="return doclink('link-26', 'command', 'link-25');">command</a></tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group_function</tt> <tt class="py-op">=</tt> <tt class="py-name">group_function</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_initial_value</tt> <tt class="py-op">=</tt> <tt class="py-name">initial_value</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate_function</tt> <tt class="py-op">=</tt> <tt class="py-name">aggregate_function</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line"> </tt>
+<a name="_ConsecutiveGroupingAggregate.receive"></a><div id="_ConsecutiveGroupingAggregate.receive-def"><a name="L223"></a><tt class="py-lineno">223</tt> <a class="py-toggle" href="#" id="_ConsecutiveGroupingAggregate.receive-toggle" onclick="return toggle('_ConsecutiveGroupingAggregate.receive');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._ConsecutiveGroupingAggregate-class.html#receive">receive</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ConsecutiveGroupingAggregate.receive-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_ConsecutiveGroupingAggregate.receive-expanded"><a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">        <tt class="py-name">new_group</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group_function</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt> <tt class="py-op">!=</tt> <tt class="py-name">new_group</tt><tt class="py-op">:</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">:</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt> <tt class="py-op">=</tt> <tt class="py-name">new_group</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_initial_value</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-name">tuple_object</tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">        <tt class="py-name">new_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate_function</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple_object</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">new_sum</tt><tt class="py-op">)</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">:</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">new_sum</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple_object</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"> </tt>
+<a name="_ConsecutiveGroupingAggregate.receive_complete"></a><div id="_ConsecutiveGroupingAggregate.receive_complete-def"><a name="L236"></a><tt class="py-lineno">236</tt> <a class="py-toggle" href="#" id="_ConsecutiveGroupingAggregate.receive_complete-toggle" onclick="return toggle('_ConsecutiveGroupingAggregate.receive_complete');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._ConsecutiveGroupingAggregate-class.html#receive_complete">receive_complete</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ConsecutiveGroupingAggregate.receive_complete-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_ConsecutiveGroupingAggregate.receive_complete-expanded"><a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_group</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send_complete</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line"> </tt>
+<a name="_NonGroupingAggregate"></a><div id="_NonGroupingAggregate-def"><a name="L241"></a><tt class="py-lineno">241</tt> <a class="py-toggle" href="#" id="_NonGroupingAggregate-toggle" onclick="return toggle('_NonGroupingAggregate');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="osh.command.agg._NonGroupingAggregate-class.html">_NonGroupingAggregate</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_NonGroupingAggregate-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_NonGroupingAggregate-expanded"><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">    <tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">    <tt class="py-name">_running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">    <tt class="py-name">_aggregate_function</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">    <tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line"> </tt>
+<a name="_NonGroupingAggregate.__init__"></a><div id="_NonGroupingAggregate.__init__-def"><a name="L247"></a><tt class="py-lineno">247</tt> <a class="py-toggle" href="#" id="_NonGroupingAggregate.__init__-toggle" onclick="return toggle('_NonGroupingAggregate.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._NonGroupingAggregate-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">command</tt><tt class="py-op">,</tt> <tt class="py-param">running_totals</tt><tt class="py-op">,</tt> <tt class="py-param">initial_value</tt><tt class="py-op">,</tt> <tt class="py-param">aggregate_function</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_NonGroupingAggregate.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_NonGroupingAggregate.__init__-expanded"><a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt> <tt class="py-op">=</tt> <tt class="py-name">running_totals</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="osh.command" class="py-name" href="#" onclick="return doclink('link-27', 'command', 'link-25');">command</a></tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate_function</tt> <tt class="py-op">=</tt> <tt class="py-name">aggregate_function</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">initial_value</tt> </tt>
+</div><a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line"> </tt>
+<a name="_NonGroupingAggregate.receive"></a><div id="_NonGroupingAggregate.receive-def"><a name="L253"></a><tt class="py-lineno">253</tt> <a class="py-toggle" href="#" id="_NonGroupingAggregate.receive-toggle" onclick="return toggle('_NonGroupingAggregate.receive');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._NonGroupingAggregate-class.html#receive">receive</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_NonGroupingAggregate.receive-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_NonGroupingAggregate.receive-expanded"><a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">        <tt class="py-name">tuple_object</tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">object</tt><tt class="py-op">)</tt>  </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">        <tt class="py-name">new_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_aggregate_function</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple_object</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt> <tt class="py-op">=</tt> <tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">new_sum</tt><tt class="py-op">)</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">:</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">_wrap_if_necessary</tt><tt class="py-op">(</tt><tt class="py-name">new_sum</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">tuple_object</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line"> </tt>
+<a name="_NonGroupingAggregate.receive_complete"></a><div id="_NonGroupingAggregate.receive_complete-def"><a name="L260"></a><tt class="py-lineno">260</tt> <a class="py-toggle" href="#" id="_NonGroupingAggregate.receive_complete-toggle" onclick="return toggle('_NonGroupingAggregate.receive_complete');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.command.agg._NonGroupingAggregate-class.html#receive_complete">receive_complete</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_NonGroupingAggregate.receive_complete-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_NonGroupingAggregate.receive_complete-expanded"><a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_running_totals</tt><tt class="py-op">:</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_sum</tt><tt class="py-op">)</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">.</tt><tt class="py-name">send_complete</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Jan 30 23:17:38 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

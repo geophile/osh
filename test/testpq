@@ -1,0 +1,89 @@
+#!/usr/bin/python
+
+import sys
+import time
+import threading
+import random
+
+import osh.priorityqueue
+PriorityQueue = osh.priorityqueue.PriorityQueue
+
+MAX_N = 10000
+MAX_THREADS = 50
+PERCENTAGE_EMPTY_SOURCES = 0.1
+
+class OutputHandler(object):
+    def send(self, x):
+        pass
+
+class LoaderThread(threading.Thread):
+
+    _priority_queue = None
+    _source = None
+    _content = None
+
+    def __init__(self, priority_queue, source):
+        threading.Thread.__init__(self)
+        self._priority_queue = priority_queue
+        self._source = source
+        self._content = []
+
+    def add(self, x):
+        self._content.append(x)
+
+    def run(self):
+        pq = self._priority_queue
+        source = self._source
+        for x in self._content:
+            pq.add(source, x)
+        pq.done(source)
+
+    n = property(lambda self: len(self._content))
+    
+def test(n, sources):
+    pq = PriorityQueue(lambda x: x, sources)
+    empty_sources = random.sample(range(sources), int(PERCENTAGE_EMPTY_SOURCES * sources))
+    threads = []
+    for i in xrange(sources):
+        threads.append(LoaderThread(pq, i))
+    for x in xrange(n):
+        source = random.randint(0, sources - 1)
+        while source in empty_sources:
+            source = random.randint(0, sources - 1)
+        thread = threads[source]
+        thread.add(x)
+    empty_sources = 0
+    for thread in threads:
+        if thread.n == 0:
+            empty_sources += 1    
+    start = time.time()
+    for thread in threads:
+        thread.start()
+    expected = 0
+    for x in pq:
+        assert expected == x, ('expected: %s, actual: %s' % (expected, x))
+        expected += 1
+    assert expected == n, ('expected count: %s, actual count: %s' % (expected, n))
+    for thread in threads:
+        while thread.isAlive():
+            thread.join(1.0)
+    end = time.time()
+    time_per_item = 1000000 * (end - start) / float(n)
+    print 'empty: %s, time (usec): %s' % (empty_sources, time_per_item)
+
+def args():
+    return int(sys.argv[1])
+    
+def main():
+    now = int(time.time())
+    print 'seed: %s' % now
+    random.seed(now)
+    n_trials = args()
+    for i in xrange(n_trials):
+        print '--- trial %s -------------------------------------------------------' % i
+        n = random.randint(0, MAX_N - 1)
+        threads = random.randint(1, MAX_THREADS - 1)
+        print 'n: %s, threads: %s' % (n, threads)
+        test(n, threads)
+
+main()

@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+# osh
+# Copyright (C) Jack Orenstein <jao@geophile.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+import subprocess
+import sys
+
+def spawn(command):
+    process = subprocess.Popen(command, 
+                               shell=True,
+                               stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               close_fds=True)
+    stdout = process.stdout.readlines()
+    stderr = process.stderr.readlines()
+    return stdout, stderr
+
+def dump(label, command, expected, stdout, stderr):
+    print '%s: %s' % (label, command)
+    print 'Expected: %s' % list(expected)
+    for line in stdout:
+        sys.stdout.write('stdout: %s' % line)
+    for line in stderr:
+        sys.stdout.write('stderr: %s' % line)
+
+command = sys.argv[1]
+expected = eval(sys.argv[2])
+expected_strings = ['%s\n' % str(o) for o in expected]
+stdout, stderr = spawn(command)
+if stderr:
+    dump('EXECUTION FAILURE', command, expected, stdout, stderr)
+elif stdout != expected_strings:
+    dump('ERRONEOUS OUTPUT', command, expected, stdout, stderr)

@@ -1,0 +1,117 @@
+
+Installation from pip should work
+
+setup.py can't rely on osh*.tar.gz. Maybe installosh should generate
+the file? INSTALLOSH IS NOW BROKEN
+
+With virtualenv, where do files installed to /usr/... go?
+
+----------------------------------------------------------------------
+
+- bug: remoteosh now calls receive_complete following execution (remote
+   agg wasn't working)
+
+- Simplify reduction over column: Don't require agg
+  initialization. Would return None instead of initial value in case
+  of no initialization.
+
+  - API
+  - user guide
+
+
+- Should the agg values be nested?
+
+osh gen 10 1 ^ agg -r '(0, 1)' 'sum, prod, x: (sum + x, prod * x)' $
+((1, 1), 1)
+((3, 2), 2)
+((6, 6), 3)
+((10, 24), 4)
+((15, 120), 5)
+((21, 720), 6)
+((28, 5040), 7)
+((36, 40320), 8)
+((45, 362880), 9)
+((55, 3628800), 10)
+
+----------------------------------------------------------------------
+
+1.0
+
+Check sql connection close, postgres and dbapi
+
+check schema access via postgres, dbapi
+
+docs:
+
+- crossrefs
+
+- Make the docs less plain - color, css for headers.
+
+......................................................................
+
+sql
+
+- remote passes thread state pickled, along with the pipeline.
+
+- remoteosh sets thread state.
+
+- sql looks for schema in thread state.
+
+- sql setup looks for set_schema config, and runs this statement to
+  set the schema, (for both dbtype and driver configs).
+
+----------------------------------------------------------------------
+
+sql command: Add schema capability to sql command. (Then asql2 isn't
+needed. Make schema part of threadid). Not clear how this works in
+general (dbapi driver).
+
+osh gen <function> should do the same thing as osh f <function> ^
+expand. Problem for cli, distinguishing function from number.
+
+squish '+ min max' should be squish + min max
+
+Get rid of class level declarations.
+
+expand: File expansion for files only, not strings
+
+----------------------------------------------------------------------
+
+split stream (inverse of merge)
+
+----------------------------------------------------------------------
+
+review uniq args -- anything to steal?
+       -c, --count
+              prefix lines by the number of occurrences
+       -d, --repeated
+              only print duplicate lines
+       -u, --unique
+              only print unique lines
+
+unique: Instead of sorting, emit immediately, and then use hash table
+to remember what has been output. (Doesn't work with -c, -u)
+
+----------------------------------------------------------------------
+
+help.py calls __import__. Should use loader to make use of osh search path.
+
+----------------------------------------------------------------------
+
+expand -1 should work.
+
+----------------------------------------------------------------------
+
+installation:
+
+- install, installosh: Multi-column output if it doesn't fit in one.
+
+- error reporting is often unreadable. Multiline output problem?
+
+- Auto install
+
+----------------------------------------------------------------------
+
+Map support
+
+- conversion between list of (key, value) and map.

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>osh.file</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="osh-module.html">Package&nbsp;osh</a> ::
+        Module&nbsp;file
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="osh.file-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="osh.file-module.html">Module osh.file</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># osh</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) Jack Orenstein &lt;jao@geophile.com&gt;</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># This program is free software; you can redistribute it and/or modify</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"># it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"># the Free Software Foundation; either version 2 of the License, or</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"># (at your option) any later version.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment"># This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"># GNU General Public License for more details.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"># along with this program; if not, write to the Free Software</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"># Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">"""Represents a file or directory on the local host.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pickle</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Package osh=osh-module.html,Function osh.api.osh()=osh.api-module.html#osh"><a title="osh
+osh.api.osh" class="py-name" href="#" onclick="return doclink('link-0', 'osh', 'link-0');">osh</a></tt><tt class="py-op">.</tt><tt class="py-name">util</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable osh.file.DIR_MASK=osh.file-module.html#DIR_MASK"><a title="osh.file.DIR_MASK" class="py-name" href="#" onclick="return doclink('link-1', 'DIR_MASK', 'link-1');">DIR_MASK</a></tt> <tt class="py-op">=</tt> <tt class="py-number">040000</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt id="link-2" class="py-name" targets="Variable osh.file.FILE_MASK=osh.file-module.html#FILE_MASK"><a title="osh.file.FILE_MASK" class="py-name" href="#" onclick="return doclink('link-2', 'FILE_MASK', 'link-2');">FILE_MASK</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0100000</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable osh.file.LINK_MASK=osh.file-module.html#LINK_MASK"><a title="osh.file.LINK_MASK" class="py-name" href="#" onclick="return doclink('link-3', 'LINK_MASK', 'link-3');">LINK_MASK</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0120000</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable osh.file.FILE_TYPE_MASK=osh.file-module.html#FILE_TYPE_MASK"><a title="osh.file.FILE_TYPE_MASK" class="py-name" href="#" onclick="return doclink('link-4', 'FILE_TYPE_MASK', 'link-4');">FILE_TYPE_MASK</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="osh.file.DIR_MASK" class="py-name" href="#" onclick="return doclink('link-5', 'DIR_MASK', 'link-1');">DIR_MASK</a></tt> <tt class="py-op">|</tt> <tt id="link-6" class="py-name"><a title="osh.file.FILE_MASK" class="py-name" href="#" onclick="return doclink('link-6', 'FILE_MASK', 'link-2');">FILE_MASK</a></tt> <tt class="py-op">|</tt> <tt id="link-7" class="py-name"><a title="osh.file.LINK_MASK" class="py-name" href="#" onclick="return doclink('link-7', 'LINK_MASK', 'link-3');">LINK_MASK</a></tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="File"></a><div id="File-def"><a name="L31"></a><tt class="py-lineno">31</tt> <a class="py-toggle" href="#" id="File-toggle" onclick="return toggle('File');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="osh.file.File-class.html">File</a><tt class="py-op">(</tt><tt class="py-base-class">str</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="File-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="File-expanded"><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">    <tt id="link-8" class="py-name" targets="Variable osh.file.File._os_stat=osh.file.File-class.html#_os_stat"><a title="osh.file.File._os_stat" class="py-name" href="#" onclick="return doclink('link-8', '_os_stat', 'link-8');">_os_stat</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="File.__new__"></a><div id="File.__new__-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="File.__new__-toggle" onclick="return toggle('File.__new__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.file.File-class.html#__new__">__new__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">dir</tt><tt class="py-op">,</tt> <tt class="py-param">file</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="File.__new__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="File.__new__-expanded"><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-9" class="py-name" targets="Module osh.file=osh.file-module.html"><a title="osh.file" class="py-name" href="#" onclick="return doclink('link-9', 'file', 'link-9');">file</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">            <tt class="py-name">path</tt> <tt class="py-op">=</tt> <tt class="py-name">dir</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">            <tt class="py-name">path</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">dir</tt><tt class="py-op">,</tt> <tt id="link-10" class="py-name"><a title="osh.file" class="py-name" href="#" onclick="return doclink('link-10', 'file', 'link-9');">file</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Static Method osh.file.File.__new__()=osh.file.File-class.html#__new__"><a title="osh.file.File.__new__" class="py-name" href="#" onclick="return doclink('link-11', '__new__', 'link-11');">__new__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">     </tt>
+<a name="File.__init__"></a><div id="File.__init__-def"><a name="L42"></a><tt class="py-lineno">42</tt> <a class="py-toggle" href="#" id="File.__init__-toggle" onclick="return toggle('File.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.file.File-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">dir</tt><tt class="py-op">,</tt> <tt class="py-param">file</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="File.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="File.__init__-expanded"><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_dir</tt> <tt class="py-op">=</tt> <tt class="py-name">dir</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_file</tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name"><a title="osh.file" class="py-name" href="#" onclick="return doclink('link-12', 'file', 'link-9');">file</a></tt> </tt>
+</div><a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"> </tt>
+<a name="File._stat"></a><div id="File._stat-def"><a name="L46"></a><tt class="py-lineno">46</tt> <a class="py-toggle" href="#" id="File._stat-toggle" onclick="return toggle('File._stat');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.file.File-class.html#_stat">_stat</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="File._stat-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="File._stat-expanded"><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="osh.file.File._os_stat" class="py-name" href="#" onclick="return doclink('link-13', '_os_stat', 'link-8');">_os_stat</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="osh.file.File._os_stat" class="py-name" href="#" onclick="return doclink('link-14', '_os_stat', 'link-8');">_os_stat</a></tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">lstat</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Variable osh.file.File.abspath=osh.file.File-class.html#abspath"><a title="osh.file.File.abspath" class="py-name" href="#" onclick="return doclink('link-15', 'abspath', 'link-15');">abspath</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="osh.file.File._os_stat" class="py-name" href="#" onclick="return doclink('link-16', '_os_stat', 'link-8');">_os_stat</a></tt> </tt>
+</div><a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"> </tt>
+<a name="File._abspath"></a><div id="File._abspath-def"><a name="L51"></a><tt class="py-lineno">51</tt> <a class="py-toggle" href="#" id="File._abspath-toggle" onclick="return toggle('File._abspath');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="osh.file.File-class.html#_abspath">_abspath</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="File._abspath-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="File._abspath-expanded"><a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_file</tt><tt class="py-op">:</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_dir</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_file</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_dir</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">    <tt id="link-17" class="py-name"><a title="osh.file.File.abspath" class="py-name" href="#" onclick="return doclink('link-17', 'abspath', 'link-15');">abspath</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="osh.file.File.abspath" class="py-name" href="#" onclick="return doclink('link-18', 'abspath', 'link-15');">abspath</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">                       <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Absolute path to this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">    <tt id="link-19" class="py-name" targets="Variable osh.file.File.stat=osh.file.File-class.html#stat"><a title="osh.file.File.stat" class="py-name" href="#" onclick="return doclink('link-19', 'stat', 'link-19');">stat</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">                    <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Information on this file, as returned by C{os.stat}."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">    <tt id="link-20" class="py-name" targets="Variable osh.file.File.mode=osh.file.File-class.html#mode"><a title="osh.file.File.mode" class="py-name" href="#" onclick="return doclink('link-20', 'mode', 'link-20');">mode</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">                    <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""mode of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">    <tt id="link-21" class="py-name" targets="Variable osh.file.File.inode=osh.file.File-class.html#inode"><a title="osh.file.File.inode" class="py-name" href="#" onclick="return doclink('link-21', 'inode', 'link-21');">inode</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">                     <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""inode of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">    <tt id="link-22" class="py-name" targets="Variable osh.file.File.device=osh.file.File-class.html#device"><a title="osh.file.File.device" class="py-name" href="#" onclick="return doclink('link-22', 'device', 'link-22');">device</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">                      <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""device of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">    <tt id="link-23" class="py-name" targets="Variable osh.file.File.links=osh.file.File-class.html#links"><a title="osh.file.File.links" class="py-name" href="#" onclick="return doclink('link-23', 'links', 'link-23');">links</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">                     <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">""" Number of links of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">    <tt id="link-24" class="py-name" targets="Variable osh.file.File.uid=osh.file.File-class.html#uid"><a title="osh.file.File.uid" class="py-name" href="#" onclick="return doclink('link-24', 'uid', 'link-24');">uid</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">4</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">                   <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Owner of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">    <tt id="link-25" class="py-name" targets="Variable osh.file.File.gid=osh.file.File-class.html#gid"><a title="osh.file.File.gid" class="py-name" href="#" onclick="return doclink('link-25', 'gid', 'link-25');">gid</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">5</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">                   <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Owning group of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">    <tt id="link-26" class="py-name" targets="Variable osh.file.File.size=osh.file.File-class.html#size,Variable osh.process.Process.size=osh.process.Process-class.html#size"><a title="osh.file.File.size
+osh.process.Process.size" class="py-name" href="#" onclick="return doclink('link-26', 'size', 'link-26');">size</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">6</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">                    <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Size of this file (bytes)."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">    <tt id="link-27" class="py-name" targets="Variable osh.file.File.atime=osh.file.File-class.html#atime"><a title="osh.file.File.atime" class="py-name" href="#" onclick="return doclink('link-27', 'atime', 'link-27');">atime</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">7</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">                     <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Access time of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">    <tt id="link-28" class="py-name" targets="Variable osh.file.File.mtime=osh.file.File-class.html#mtime"><a title="osh.file.File.mtime" class="py-name" href="#" onclick="return doclink('link-28', 'mtime', 'link-28');">mtime</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">8</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">                     <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Modify time of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">    <tt id="link-29" class="py-name" targets="Variable osh.file.File.ctime=osh.file.File-class.html#ctime"><a title="osh.file.File.ctime" class="py-name" href="#" onclick="return doclink('link-29', 'ctime', 'link-29');">ctime</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stat</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">9</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">                     <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""Change time of this file."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">    <tt id="link-30" class="py-name" targets="Variable osh.file.File.isdir=osh.file.File-class.html#isdir"><a title="osh.file.File.isdir" class="py-name" href="#" onclick="return doclink('link-30', 'isdir', 'link-30');">isdir</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="osh.file.File.mode" class="py-name" href="#" onclick="return doclink('link-31', 'mode', 'link-20');">mode</a></tt> <tt class="py-op">&amp;</tt> <tt id="link-32" class="py-name"><a title="osh.file.FILE_TYPE_MASK" class="py-name" href="#" onclick="return doclink('link-32', 'FILE_TYPE_MASK', 'link-4');">FILE_TYPE_MASK</a></tt> <tt class="py-op">==</tt> <tt id="link-33" class="py-name"><a title="osh.file.DIR_MASK" class="py-name" href="#" onclick="return doclink('link-33', 'DIR_MASK', 'link-1');">DIR_MASK</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">                     <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""True iff this file is a directory."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">    <tt id="link-34" class="py-name" targets="Variable osh.file.File.isfile=osh.file.File-class.html#isfile"><a title="osh.file.File.isfile" class="py-name" href="#" onclick="return doclink('link-34', 'isfile', 'link-34');">isfile</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="osh.file.File.mode" class="py-name" href="#" onclick="return doclink('link-35', 'mode', 'link-20');">mode</a></tt> <tt class="py-op">&amp;</tt> <tt id="link-36" class="py-name"><a title="osh.file.FILE_TYPE_MASK" class="py-name" href="#" onclick="return doclink('link-36', 'FILE_TYPE_MASK', 'link-4');">FILE_TYPE_MASK</a></tt> <tt class="py-op">==</tt> <tt id="link-37" class="py-name"><a title="osh.file.FILE_MASK" class="py-name" href="#" onclick="return doclink('link-37', 'FILE_MASK', 'link-2');">FILE_MASK</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">                      <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""True iff this file is neither a directory nor a symlink."""</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">    <tt id="link-38" class="py-name" targets="Variable osh.file.File.islink=osh.file.File-class.html#islink"><a title="osh.file.File.islink" class="py-name" href="#" onclick="return doclink('link-38', 'islink', 'link-38');">islink</a></tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="osh.file.File.mode" class="py-name" href="#" onclick="return doclink('link-39', 'mode', 'link-20');">mode</a></tt> <tt class="py-op">&amp;</tt> <tt id="link-40" class="py-name"><a title="osh.file.FILE_TYPE_MASK" class="py-name" href="#" onclick="return doclink('link-40', 'FILE_TYPE_MASK', 'link-4');">FILE_TYPE_MASK</a></tt> <tt class="py-op">==</tt> <tt id="link-41" class="py-name"><a title="osh.file.LINK_MASK" class="py-name" href="#" onclick="return doclink('link-41', 'LINK_MASK', 'link-3');">LINK_MASK</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line">                      <tt class="py-name">doc</tt> <tt class="py-op">=</tt> <tt class="py-string">"""True iff this file is a symlink."""</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="osh-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://geophile.com/osh">osh</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Jan 30 23:17:38 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

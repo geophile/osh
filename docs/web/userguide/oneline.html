@@ -1,0 +1,85 @@
+<html>
+<head><title>Osh One-Liners</title></head>
+<body>
+<center>
+<h1>Osh One-Liners</h1>
+</center>
+
+Here are some simple, possibly useful things that can be done in one-line of osh. (More
+precisely, in a single osh invocation, possible split across multiple lines for readability.)
+
+<h2>List the currently running processes</h2>
+
+<pre>
+    <font color="grey">zack$</font> <b>osh ps $</b>
+    ...
+    (Process(2416),)
+    (Process(2443),)
+    (Process(2459),)
+    (Process(2460),)
+    (Process(2464),)
+    ...
+</pre>
+
+Not very useful. Processes are objects, and Process(X) is the string
+obtained by applying the str function to a Process. X is the pid of
+the process.
+
+<h2>List the pid and command-line of running processes</h2>
+
+<pre>
+    <font color="grey">zack$</font> <b>osh ps ^ f 'p: (p.pid, p.command_line)' $</b>
+    ...
+    (2416, '-bash ')
+    (2443, '/bin/sh /usr/bin/startx ')
+    (2459, 'xinit /etc/X11/xinit/xinitrc -- -auth /home/jao/.serverauth.2443 ')
+    (2460, 'X :0 -auth /home/jao/.serverauth.2443 ')
+    (2464, '/usr/bin/gnome-session ')
+    ...
+</pre>
+
+A little better, but the host OS command ps will do this too.
+
+<h2>Find the longest word in the dictionary</h2>
+
+<pre>
+    <font color="grey">zack$</font> <b>cat /usr/share/dict/words | osh ^ \
+          agg '""' 'longest, word: ifelse(len(word) > len(longest), word, longest)' ^ \
+          out %s</b>
+    formaldehydesulphoxylate
+</pre>
+
+<h2>Find the word length distribution of words in the dictionary</h2>
+
+<pre>
+    <font color="grey">zack$</font> <b>cat /usr/share/dict/words | osh ^ \
+          agg -g 'word: len(word)' 0 'count, word: count + 1' ^ \
+          sort $</b>
+    (1, 52)
+    (2, 155)
+    (3, 1351)
+    (4, 5110)
+    (5, 9987)
+    (6, 17477)
+    (7, 23734)
+    (8, 29926)
+    (9, 32380)
+    (10, 30867)
+    (11, 26010)
+    (12, 20460)
+    (13, 14937)
+    (14, 9763)
+    (15, 5924)
+    (16, 3377)
+    (17, 1813)
+    (18, 842)
+    (19, 428)
+    (20, 198)
+    (21, 82)
+    (22, 41)
+    (23, 17)
+    (24, 5)
+</pre>
+
+</body>
+</html>
