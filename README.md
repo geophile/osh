@@ -30,7 +30,7 @@ database as follows (using the CLI):
 
 * __osh__: Invokes the osh interpreter.
 * __@fred [ ... ]__: fred is the name of a cluster, (configured in the osh configuration file, .oshrc). A thread is created for each node of the cluster, and the bracketed command run remotely on each, in parallel.
-* __sql "select count(__) from request where state = 'open'"*: sql is an osh command that submits a query to a relational database. The query output is returned as a stream of tuples. 
+* __sql "select count(*) from request where state = 'open'"__: sql is an osh command that submits a query to a relational database. The query output is returned as a stream of tuples. 
 * __^ out__: ^ is the osh operator for piping objects from one command to the next In this case, the input objects are tuples resulting from execution of a SQL query on each node of the cluster. The out command renders each object as a string and prints it to stdout.
 
 Each output row identifies the node of origination (e.g. 101, 102),
