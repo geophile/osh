@@ -96,5 +96,5 @@ More information
 * License: [GPL](LICENSE.txt)
 * [Release history](http://geophile.com/osh/history.html)
 * [User's Guide](http://geophile.com/osh/userguide)
-* [Command Reference Guide](http://geophile.com/osh/web/ref)
+* [Command Reference Guide](http://geophile.com/osh/ref)
 * [Software with similar goals](http://geophile.com/osh/similar.html)
