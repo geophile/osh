@@ -98,3 +98,5 @@ More information
 * [User's Guide](http://geophile.com/osh/userguide)
 * [Command Reference Guide](http://geophile.com/osh/ref)
 * [Software with similar goals](http://geophile.com/osh/similar.html)
+* [PyCon 2006 paper on osh](http://geophile.com/osh/pycon2006/pycon2006_paper.html)
+* [PyCon 2006 talk on osh](http://geophile.com/osh/pycon2006/index.html)
