@@ -28,11 +28,10 @@ database as follows (using the CLI):
     ('102', 0)
     ('103', 5)
 
-* *osh*: Invokes the osh interpreter.
-
-* *@fred [ ... ]*: fred is the name of a cluster, (configured in the osh configuration file, .oshrc). A thread is created for each node of the cluster, and the bracketed command run remotely on each, in parallel.
-* *sql "select count(*) from request where state = 'open'"*: sql is an osh command that submits a query to a relational database. The query output is returned as a stream of tuples. 
-* *^ out*: ^ is the osh operator for piping objects from one command to the next In this case, the input objects are tuples resulting from execution of a SQL query on each node of the cluster. The out command renders each object as a string and prints it to stdout.
+* __osh__: Invokes the osh interpreter.
+* __@fred [ ... ]__: fred is the name of a cluster, (configured in the osh configuration file, .oshrc). A thread is created for each node of the cluster, and the bracketed command run remotely on each, in parallel.
+* __sql "select count(__) from request where state = 'open'"*: sql is an osh command that submits a query to a relational database. The query output is returned as a stream of tuples. 
+* __^ out__: ^ is the osh operator for piping objects from one command to the next In this case, the input objects are tuples resulting from execution of a SQL query on each node of the cluster. The out command renders each object as a string and prints it to stdout.
 
 Each output row identifies the node of origination (e.g. 101, 102),
 and includes a tuple from the database on that node. So ('103', 5)
@@ -48,10 +47,10 @@ aggregation command:
     jao@zack$ osh @fred [ sql "select count(*) from request where state = 'open'" ] ^ f 'node, count: count' ^ red + $
     6
 
-* *f*: f is the osh command for function application. In this case, the function has two arguments, the node from which the count was obtained, and the count itself. This function returns just the count.
-* *red +*: red is the reduction command. Input consists of counts from the nodes of the cluster. + is applied to combine the counts into a single number.
-* *$*: An alternative to ^ out that can be used at the end of a command only.
-* *6*: The total of the counts from across the cluster. 
+* __f__: f is the osh command for function application. In this case, the function has two arguments, the node from which the count was obtained, and the count itself. This function returns just the count.
+* __red +__: red is the reduction command. Input consists of counts from the nodes of the cluster. + is applied to combine the counts into a single number.
+* __$__: An alternative to ^ out that can be used at the end of a command only.
+* __6__: The total of the counts from across the cluster. 
 
 Note that this example combines remote execution on cluster nodes, database access (on each cluster node), and data processing (the aggregation step) in a single framework.
 
@@ -70,12 +69,12 @@ The same computation can be done using the API as follows:
         red(lambda x, y: x + y),
         out())
 
-* *from osh.api import *: Imports the osh API.
-* *osh(...)*: Invokes the osh interpreter.
-* *remote("fred", sql(...)): Runs the sql command on each node of cluster fred, in parallel.
-* *f(lambda node, count: count)*: To each (node, count) coming from the previous command, apply a function which discards the node identifier and keeps the count.
-* *red(lambda x, y: x + y)*: Apply addition to the sequence of counts.
-* *out()*: Print each input.
+* __from osh.api import\__*: Imports the osh API.
+* __osh(...)__: Invokes the osh interpreter.
+* __remote("fred", sql(...)): Runs the sql command on each node of cluster fred, in parallel.
+__ *f(lambda node, count: count)*: To each (node, count) coming from the previous command, apply a function which discards the node identifier and keeps the count.
+* __red(lambda x, y: x + y)__: Apply addition to the sequence of counts.
+* __out()__: Print each input.
 
 Installation
 ============
