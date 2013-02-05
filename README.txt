@@ -69,9 +69,9 @@ The same computation can be done using the API as follows:
         red(lambda x, y: x + y),
         out())
 
-* __from osh.api import\__*: Imports the osh API.
+* __from osh.api import\*__: Imports the osh API.
 * __osh(...)__: Invokes the osh interpreter.
-* __remote("fred", sql(...)): Runs the sql command on each node of cluster fred, in parallel.
+* __remote("fred", sql(...))__: Runs the sql command on each node of cluster fred, in parallel.
 __ *f(lambda node, count: count)*: To each (node, count) coming from the previous command, apply a function which discards the node identifier and keeps the count.
 * __red(lambda x, y: x + y)__: Apply addition to the sequence of counts.
 * __out()__: Print each input.
