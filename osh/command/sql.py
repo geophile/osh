@@ -38,7 +38,7 @@ import osh.core
 def _sql():
     return _Sql()
 
-# CLI
+# API
 def sql(query, db = None):
     """Executes a sql query on a specified database.  Occurrences of
     formatting directives (e.g. C{%s}) will be replaced by input values.

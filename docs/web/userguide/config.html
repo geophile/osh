@@ -52,7 +52,9 @@ the <tt>family</tt> database as 'jao':
 <li><tt>osh.sql.family.user = 'jao'</tt> means that the connection to <tt>familydb</tt> is done as user <tt>jao</tt>.
 </ul>
 
-<p>Slice notation is also supported, e.g.
+
+<p>
+Slice notation is also supported, e.g.
 
 <pre>
     osh.sql['family'].user = 'jao'
@@ -74,29 +76,19 @@ The profile specifies a module implementing the connect method of a DBAPI 2.0 dr
 the arguments to the module's <tt>connect</tt> method, e.g.
 
 <pre>
-    osh.sql.family.driver = 'pg8000.dbapi'
+    osh.sql.family.driver = 'psycopg2'
     osh.sql.family.host = 'localhost'
     osh.sql.family.database = 'familydb'
     osh.sql.family.user = 'jao'
     osh.sql.family.password = 'l3tme1n'
 </pre>
 
-This specification results in a connection being created
-as <tt>pg8000.dbapi.connect(host = 'localhost', database = 'familydb',
-user = 'jao', password = 'l3tme1n')</tt>.
+This specification results in a connection to a postgres database, through the psycopg2 driver,
+being created as <tt>psycopg2.connect(host = 'localhost', database =
+'familydb', user = 'jao', password = 'l3tme1n')</tt>.
 
 <p>The DBAPI driver is not included with osh. It needs to be in your python environment,
 located on PYTHONPATH, in site-packages, or in a location specified by sitecustomize.py.
-
-<p>osh also provides access to postgres databases using the pygresql driver as follows:
-  
-<pre>
-    osh.sql.family.dbtype = 'postgres'
-    osh.sql.family.host = 'localhost'
-    osh.sql.family.db = 'familydb'
-    osh.sql.family.user = 'jao'
-    osh.sql.family.password = 'l3tme1n'
-</pre>
 
 A default database profile can be specified by assigning a value to <tt>osh.sql</tt>, e.g.
 

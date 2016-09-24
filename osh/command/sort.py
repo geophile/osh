@@ -31,7 +31,7 @@ import osh.core
 def _sort():
     return _Sort()
 
-# CLI
+# API
 def sort(function = None):
     """Input objects are sorted before being written to output. If
     C{function} is not provided then input objects are sorted using the
