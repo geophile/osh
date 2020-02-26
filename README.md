@@ -1,3 +1,13 @@
+THIS IS OBSOLETE!
+
+I really like osh, and I've been using it for years, but it's time to do something better. I've started a new project, [marcel](https://github.com/geophile/marcel), which preserves the main ideas of osh, but: 
+
+- It's in Python 3.
+- It's a real shell.
+- It has a bunch of new ideas.
+
+Check it out.
+
 osh
 ===
 
